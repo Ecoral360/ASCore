@@ -1,7 +1,6 @@
 package org.ascore.lang.modules.core;
 
 import org.ascore.lang.objects.*;
-import org.ascore.lang.objects.managers.ASFonctionManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,20 +29,22 @@ public record Module(ASFonctionModule[] fonctionModules,
     }
 
     public void utiliser(String prefix) {
-        ASFonctionManager.ajouterStructure(prefix);
+        //ASFonctionManager.ajouterStructure(prefix);
         for (ASFonctionModule fonctionModule : fonctionModules) {
             ASScope.getCurrentScope().declarerVariable(new ASVariable(fonctionModule.getNom(), fonctionModule, new ASType(fonctionModule.obtenirNomType())));
         }
         for (ASVariable variable : variables) {
             ASScope.getCurrentScope().declarerVariable(variable.clone());
         }
-        ASFonctionManager.retirerStructure();
+        //ASFonctionManager.retirerStructure();
     }
 
     public void utiliser(List<String> nomMethodes) {
         for (ASFonctionModule fonctionModule : fonctionModules) {
-            if (nomMethodes.contains(fonctionModule.getNom()))
-                ASFonctionManager.ajouterFonction(fonctionModule);
+            if (nomMethodes.contains(fonctionModule.getNom())) {
+                // ASFonctionManager.ajouterFonction(fonctionModule);
+                ASScope.getCurrentScope().declarerVariable(new ASVariable(fonctionModule.getNom(), fonctionModule, new ASType(fonctionModule.obtenirNomType())));
+            }
         }
         for (ASVariable variable : variables) {
             if (nomMethodes.contains(variable.obtenirNom())) {

@@ -1,6 +1,5 @@
 package org.ascore.lang.objects;
 
-import org.ascore.lang.objects.managers.ASFonctionManager;
 import org.ascore.errors.ASError;
 
 import java.util.function.Function;
@@ -18,7 +17,7 @@ public class ASVariable implements ASObjet<Object> {
 
     public ASVariable(String nom, ASObjet<?> valeur, ASType type) {
         this.type = type == null ? new ASType("tout") : type;
-        this.nom = ASFonctionManager.ajouterDansStructure(nom);
+        this.nom = nom; // ASFonctionManager.ajouterDansStructure(nom);
         this.valeur = valeur instanceof ASVariable var ? var.getValeurApresGetter() : valeur;
     }
 

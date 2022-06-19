@@ -1,15 +1,14 @@
 package org.ascore.executor;
 
-import org.ascore.lang.objects.ASScope;
-import org.ascore.lang.objects.managers.ASFonctionManager;
+import io.github.cdimascio.dotenv.Dotenv;
 import org.ascore.ast.buildingBlocs.Statement;
-import org.ascore.lang.Parser;
-import org.ascore.lang.Lexer;
 import org.ascore.errors.ASError;
 import org.ascore.errors.ASError.*;
+import org.ascore.lang.Lexer;
+import org.ascore.lang.Parser;
 import org.ascore.lang.modules.core.ModuleManager;
+import org.ascore.lang.objects.ASScope;
 import org.ascore.managers.data.Data;
-import io.github.cdimascio.dotenv.Dotenv;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -54,6 +53,9 @@ public class Executor {
                 .load();
         MAX_DATA_BEFORE_SEND = Integer.parseInt(dotenv.get("MAX_DATA_BEFORE_SEND"));
     }
+
+    // state
+    private final ExecutorState executorState = new ExecutorState();
 
     // lexer et parser
     private final Lexer lexer;
@@ -147,6 +149,10 @@ public class Executor {
      */
     public Lexer getLexer() {
         return lexer;
+    }
+
+    public ExecutorState getExecutorState() {
+        return executorState;
     }
 
     // methode utilisee a chaque fois qu'une info doit etre afficher par le langage
@@ -470,9 +476,9 @@ public class Executor {
             if (!coordRunTime.getBlocActuel().equals("main")) {
                 throw new ErreurFermeture(coordRunTime.getBlocActuel());
             }
-            if (!ASFonctionManager.obtenirStructure().isBlank()) {
-                throw new ErreurFermeture(ASFonctionManager.obtenirStructure());
-            }
+//            if (!ASFonctionManager.obtenirStructure().isBlank()) {
+//                throw new ErreurFermeture(ASFonctionManager.obtenirStructure());
+//            }
         } catch (ErreurAliveScript err) {
             canExecute = false;
             compilationActive = false;
@@ -626,7 +632,7 @@ public class Executor {
         // supprime les variables, fonctions et iterateurs de la memoire
         datas.clear();
 
-        ASFonctionManager.reset();
+        // ASFonctionManager.reset();
 
         moduleManager.utiliserModuleBuitlins();
 

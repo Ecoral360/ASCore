@@ -8,7 +8,6 @@ import org.ascore.lang.objects.ASObjet;
 import org.ascore.ast.buildingBlocs.Expression;
 import org.ascore.ast.buildingBlocs.Statement;
 import org.ascore.ast.buildingBlocs.expressions.Var;
-import org.uselessfun.ascore.as.lang.*;
 
 /**
  * Exemple d'un {@link Statement} charg\u00E9 de d\u00E9clarer une variable

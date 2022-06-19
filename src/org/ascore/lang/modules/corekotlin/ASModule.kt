@@ -4,7 +4,6 @@ import org.ascore.lang.objects.ASFonctionModule
 import org.ascore.lang.objects.ASScope
 import org.ascore.lang.objects.ASType
 import org.ascore.lang.objects.ASVariable
-import org.ascore.lang.objects.managers.ASFonctionManager
 import java.util.*
 import java.util.stream.Collectors
 import java.util.stream.Stream
@@ -24,7 +23,6 @@ class ASModule(
 ) {
 
     fun utiliser(prefix: String) {
-        ASFonctionManager.ajouterStructure(prefix)
         for (fonctionModule in fonctionModules) {
             ASScope.getCurrentScope().declarerVariable(
                 ASVariable(
@@ -37,12 +35,19 @@ class ASModule(
         for (variable in variables) {
             ASScope.getCurrentScope().declarerVariable(variable.clone())
         }
-        ASFonctionManager.retirerStructure()
     }
 
     fun utiliser(nomMethodes: List<String>) {
         for (fonctionModule in fonctionModules) {
-            if (nomMethodes.contains(fonctionModule.nom)) ASFonctionManager.ajouterFonction(fonctionModule)
+            if (nomMethodes.contains(fonctionModule.nom))
+            // ASFonctionManager.ajouterFonction(fonctionModule);
+                ASScope.getCurrentScope().declarerVariable(
+                    ASVariable(
+                        fonctionModule.nom,
+                        fonctionModule,
+                        ASType(fonctionModule.obtenirNomType())
+                    )
+                )
         }
         for (variable in variables) {
             if (nomMethodes.contains(variable.obtenirNom())) {

@@ -7,9 +7,7 @@ package org.ascore.lang.objects;
  * @param <T>
  * @author Mathis Laroche
  */
-public interface ASObjet<T> {
-
-    T getValue();
+public interface ASObjet<T> extends ASCObject<T> {
 
     /**
      * Repr\u00E9sentation de l'objet en tant que bool\u00E9en
