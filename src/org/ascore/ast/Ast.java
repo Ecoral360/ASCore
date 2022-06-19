@@ -1,5 +1,7 @@
 package org.ascore.ast;
 
+import org.ascore.ast.buildingBlocs.Expression;
+
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -10,7 +12,7 @@ import java.util.function.Function;
  * @author Mathis Laroche
  */
 public abstract class Ast<T> implements BiFunction<List<Object>, Integer, T> {
-    private final Hashtable<String, Ast<?>> subAsts = new Hashtable<>();
+    private final Hashtable<String, Ast<? extends Expression<?>>> subAsts = new Hashtable<>();
     private int importance;
 
     public Ast() {
@@ -22,7 +24,7 @@ public abstract class Ast<T> implements BiFunction<List<Object>, Integer, T> {
     }
 
     @SafeVarargs
-    public Ast(Map.Entry<String, Ast<?>>... subAsts) {
+    public Ast(Map.Entry<String, Ast<? extends Expression<?>>>... subAsts) {
         this();
         for (var sous_ast : subAsts) {
             this.subAsts.put(sous_ast.getKey(), sous_ast.getValue());
@@ -30,7 +32,7 @@ public abstract class Ast<T> implements BiFunction<List<Object>, Integer, T> {
     }
 
     @SafeVarargs
-    public Ast(int importance, Map.Entry<String, Ast<?>>... subAsts) {
+    public Ast(int importance, Map.Entry<String, Ast<? extends Expression<?>>>... subAsts) {
         this(importance);
         for (var sous_ast : subAsts) {
             this.subAsts.put(sous_ast.getKey(), sous_ast.getValue());
@@ -74,7 +76,7 @@ public abstract class Ast<T> implements BiFunction<List<Object>, Integer, T> {
     }
 
 
-    public Hashtable<String, Ast<?>> getSousAst() {
+    public Hashtable<String, Ast<? extends Expression<?>>> getSousAst() {
         return this.subAsts;
     }
 

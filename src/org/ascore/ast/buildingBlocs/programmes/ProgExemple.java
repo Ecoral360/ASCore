@@ -42,7 +42,7 @@ public class ProgExemple extends Statement {
      * <ul>
      *     <li>
      *         <code>null</code> -> continue normalement l'ex\u00E9cution
-     *         (la plupart des programmes retournent <code>null</code>)
+     *         (la plupart des statements retournent <code>null</code>)
      *     </li>
      *     <li>
      *         <code>instance of Data</code> -> data ajout\u00E9e \u00e0 la liste de data tenue par l'ex\u00E9cuteur

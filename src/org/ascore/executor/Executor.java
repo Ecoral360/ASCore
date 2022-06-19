@@ -45,7 +45,7 @@ afficher "fin"
 public class Executor {
 
     private final static int MAX_DATA_BEFORE_SEND;
-    // coordonne ou commencer tous les programmes
+    // coordonne ou commencer tous les statements
     final private static Coordinate debutCoord = new Coordinate("<0>main");
 
     static {
