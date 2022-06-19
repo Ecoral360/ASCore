@@ -18,14 +18,14 @@ import java.util.stream.Stream;
  *
  * @author Mathis Laroche
  */
-public record ASModule(ASFonctionModule[] fonctionModules,
-                             ASVariable[] variables) {
+public record Module(ASFonctionModule[] fonctionModules,
+                     ASVariable[] variables) {
 
-    public ASModule(ASFonctionModule[] fonctionModules) {
+    public Module(ASFonctionModule[] fonctionModules) {
         this(fonctionModules, new ASVariable[]{});
     }
 
-    public ASModule(ASVariable[] variables) {
+    public Module(ASVariable[] variables) {
         this(new ASFonctionModule[]{}, variables);
     }
 

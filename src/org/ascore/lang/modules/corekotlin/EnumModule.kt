@@ -1,13 +1,13 @@
 package org.ascore.lang.modules.corekotlin
 
 import org.ascore.lang.modules.EnumModule
-import org.ascore.lang.modules.core.ASModuleFactory
-import org.ascore.lang.modules.core.ASModuleManager
+import org.ascore.lang.modules.core.ModuleFactory
+import org.ascore.lang.modules.core.ModuleManager
 
-enum class EnumModule(moduleFactory: ASModuleFactory?) {
+enum class EnumModule(moduleFactory: ModuleFactory?) {
     ;
 
     init {
-        ASModuleManager.enregistrerModule(EnumModule.valueOf(this.toString()), moduleFactory)
+        ModuleManager.enregistrerModule(EnumModule.valueOf(this.toString()), moduleFactory)
     }
 }

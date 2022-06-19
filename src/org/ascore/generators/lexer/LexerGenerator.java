@@ -52,7 +52,7 @@ public class LexerGenerator {
         reglesAjoutees.add(new TokenRule(nom, pattern, categorie));
     }
 
-    protected void sortRegle() {
+    protected void sortTokenRules() {
         ArrayList<TokenRule> nomVars = reglesAjoutees.stream().filter(r -> r.getNom().equals("NOM_VARIABLE")).collect(Collectors.toCollection(ArrayList::new));
         reglesAjoutees = reglesAjoutees.stream().filter(r -> !r.getNom().equals("NOM_VARIABLE")).collect(Collectors.toCollection(ArrayList::new));
 

@@ -3,7 +3,7 @@ package org.ascore.lang.modules.builtins;
 import org.ascore.lang.objects.ASConstante;
 import org.ascore.lang.objects.ASFonctionModule;
 import org.ascore.lang.objects.ASVariable;
-import org.ascore.lang.modules.core.ASModule;
+import org.ascore.lang.modules.core.Module;
 import org.ascore.executor.Executor;
 
 /**
@@ -14,7 +14,7 @@ import org.ascore.executor.Executor;
  */
 public class ModuleBuiltin {
 
-    public static ASModule charger(Executor executorInstance) {
+    public static Module load(Executor executorInstance) {
         var fonctionsBuiltin = new ASFonctionModule[]{
                 // ajouter vos fonctions builtin ici
         };
@@ -22,6 +22,6 @@ public class ModuleBuiltin {
                 // ajouter vos variables et vos constantes builtin ici
         };
 
-        return new ASModule(fonctionsBuiltin, variablesBuiltin);
+        return new Module(fonctionsBuiltin, variablesBuiltin);
     }
 }

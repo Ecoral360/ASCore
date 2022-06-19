@@ -14,6 +14,6 @@ public class Lexer extends LexerGenerator {
         super();
         LexerLoader loader = new LexerLoader("ascore/regle_et_grammaire/Grammar.yaml");
         loader.load();
-        sortRegle();
+        sortTokenRules();
     }
 }

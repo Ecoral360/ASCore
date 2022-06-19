@@ -16,8 +16,8 @@ import java.util.*;
  *
  * @author Mathis Laroche
  */
-public record ASModuleManager(Executor executorInstance) {
-    private final static Hashtable<EnumModule, ASModuleFactory> MODULE_FACTORY = new Hashtable<>();
+public record ModuleManager(Executor executorInstance) {
+    private final static Hashtable<EnumModule, ModuleFactory> MODULE_FACTORY = new Hashtable<>();
     /*
     TABLE DES MATIERES:
     Module:
@@ -27,12 +27,12 @@ public record ASModuleManager(Executor executorInstance) {
     -Math
      */
 
-    public static void enregistrerModule(EnumModule nomModule, ASModuleFactory moduleFactory) {
+    public static void enregistrerModule(EnumModule nomModule, ModuleFactory moduleFactory) {
         MODULE_FACTORY.put(nomModule, moduleFactory);
     }
 
-    public ASModule getModuleBuiltins() {
-        return MODULE_FACTORY.get(EnumModule.builtins).charger(executorInstance);
+    public Module getModuleBuiltins() {
+        return MODULE_FACTORY.get(EnumModule.builtins).load(executorInstance);
     }
 
     public void utiliserModuleBuitlins() {
@@ -56,7 +56,7 @@ public record ASModuleManager(Executor executorInstance) {
         if (nomModule.equals("experimental")) {
             return;
         }
-        ASModule module = getModule(nomModule);
+        Module module = getModule(nomModule);
 
         module.utiliser(nomModule);
         ASScope.getCurrentScope().declarerVariable(new ASConstante(nomModule, new ASListe(module
@@ -77,7 +77,7 @@ public record ASModuleManager(Executor executorInstance) {
             return;
         }
 
-        ASModule module = getModule(nomModule);
+        Module module = getModule(nomModule);
 
         List<String> nomsFctEtConstDemandees = Arrays.asList(methodes);
 
@@ -97,14 +97,14 @@ public record ASModuleManager(Executor executorInstance) {
     }
 
 
-    public ASModule getModule(String nomModule) {
-        ASModuleFactory module;
+    public Module getModule(String nomModule) {
+        ModuleFactory module;
         try {
             module = MODULE_FACTORY.get(EnumModule.valueOf(nomModule));
         } catch (IllegalArgumentException err) {
             throw new ASError.ErreurModule("Le module '" + nomModule + "' n'existe pas");
         }
-        return module.charger(executorInstance);
+        return module.load(executorInstance);
     }
 }
 

@@ -7,7 +7,7 @@ import org.ascore.lang.Parser;
 import org.ascore.lang.Lexer;
 import org.ascore.errors.ASError;
 import org.ascore.errors.ASError.*;
-import org.ascore.lang.modules.core.ASModuleManager;
+import org.ascore.lang.modules.core.ModuleManager;
 import org.ascore.managers.data.Data;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.json.JSONArray;
@@ -63,7 +63,7 @@ public class Executor {
     // Coordonnee utilisee lors de l'execution pour savoir quelle ligne executer
     private final Coordinate coordRunTime = new Coordinate(debutCoord.toString());
     // modules
-    private final ASModuleManager moduleManager;
+    private final ModuleManager moduleManager;
 
     // data explaining the actions to do to the com.server
     private final ArrayList<Data> datas = new ArrayList<>();
@@ -82,7 +82,7 @@ public class Executor {
 
     public Executor() {
         lexer = new Lexer();
-        moduleManager = new ASModuleManager(this);
+        moduleManager = new ModuleManager(this);
         parser = new Parser(this);
     }
 
@@ -254,7 +254,7 @@ public class Executor {
         this.parser = parser;
     }
 
-    public ASModuleManager getAsModuleManager() {
+    public ModuleManager getAsModuleManager() {
         return moduleManager;
     }
 
