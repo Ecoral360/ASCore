@@ -1,7 +1,7 @@
 package org.ascore.tokens;
 
 
-import org.ascore.generateurs.lexer.TokenRule;
+import org.ascore.generators.lexer.TokenRule;
 
 import java.util.Objects;
 

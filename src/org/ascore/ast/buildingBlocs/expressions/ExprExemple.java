@@ -1,7 +1,7 @@
 package org.ascore.ast.buildingBlocs.expressions;
 
-import org.ascore.as.lang.datatype.ASNul;
-import org.ascore.as.lang.datatype.ASObjet;
+import org.ascore.lang.objects.datatype.ASNul;
+import org.ascore.lang.objects.ASObjet;
 import org.ascore.ast.buildingBlocs.Expression;
 
 /**

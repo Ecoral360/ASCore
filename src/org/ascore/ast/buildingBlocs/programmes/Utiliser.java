@@ -1,9 +1,9 @@
 package org.ascore.ast.buildingBlocs.programmes;
 
-import org.ascore.as.lang.ASConstante;
-import org.ascore.as.lang.ASFonctionModule;
-import org.ascore.as.lang.ASVariable;
-import org.ascore.as.modules.core.ASModule;
+import org.ascore.lang.objects.ASConstante;
+import org.ascore.lang.objects.ASFonctionModule;
+import org.ascore.lang.objects.ASVariable;
+import org.ascore.lang.modules.core.ASModule;
 import org.ascore.ast.buildingBlocs.Statement;
 import org.ascore.ast.buildingBlocs.expressions.Var;
 import org.ascore.executor.Executor;

@@ -1,10 +1,10 @@
 package org.ascore.ast.buildingBlocs.programmes;
 
 
-import org.ascore.as.erreurs.ASError;
-import org.ascore.as.lang.*;
-import org.ascore.as.lang.datatype.ASNul;
-import org.ascore.as.lang.datatype.ASObjet;
+import org.ascore.errors.ASError;
+import org.ascore.lang.objects.*;
+import org.ascore.lang.objects.datatype.ASNul;
+import org.ascore.lang.objects.ASObjet;
 import org.ascore.ast.buildingBlocs.Expression;
 import org.ascore.ast.buildingBlocs.Statement;
 import org.ascore.ast.buildingBlocs.expressions.Var;

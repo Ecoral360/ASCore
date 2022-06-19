@@ -1,9 +1,9 @@
 package org.ascore.ast.buildingBlocs.expressions;
 
-import org.ascore.as.lang.ASScope;
-import org.ascore.as.lang.datatype.ASObjet;
+import org.ascore.lang.objects.ASScope;
+import org.ascore.lang.objects.ASObjet;
 import org.ascore.ast.buildingBlocs.Expression;
-import org.ascore.as.erreurs.ASError;
+import org.ascore.errors.ASError;
 
 import java.util.Objects;
 

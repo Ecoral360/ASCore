@@ -1,7 +1,7 @@
 package org.ascore.ast.buildingBlocs.exemple.expressions;
 
 import org.ascore.ast.buildingBlocs.Expression;
-import org.ascore.as.lang.datatype.ASEntier;
+import org.ascore.lang.objects.datatype.ASEntier;
 
 public record Addition(ExprEntier nb1, ExprEntier nb2) implements Expression<ASEntier> {
     @Override

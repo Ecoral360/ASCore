@@ -1,14 +1,14 @@
 package org.ascore.executor;
 
-import org.ascore.as.lang.ASScope;
-import org.ascore.as.lang.managers.ASFonctionManager;
+import org.ascore.lang.objects.ASScope;
+import org.ascore.lang.objects.managers.ASFonctionManager;
 import org.ascore.ast.buildingBlocs.Statement;
-import org.ascore.as.ASAst;
-import org.ascore.as.ASLexer;
-import org.ascore.as.erreurs.ASError;
-import org.ascore.as.erreurs.ASError.*;
-import org.ascore.as.modules.core.ASModuleManager;
-import org.ascore.data_manager.Data;
+import org.ascore.lang.Parser;
+import org.ascore.lang.Lexer;
+import org.ascore.errors.ASError;
+import org.ascore.errors.ASError.*;
+import org.ascore.lang.modules.core.ASModuleManager;
+import org.ascore.managers.data.Data;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -56,7 +56,7 @@ public class Executor {
     }
 
     // lexer et parser
-    private final ASLexer lexer;
+    private final Lexer lexer;
     //------------------------ compilation -----------------------------//
     private final Hashtable<String, Hashtable<String, Statement>> coordCompileDict = new Hashtable<>();
     private final ArrayList<Coordinate> coordCompileTime = new ArrayList<>();
@@ -72,7 +72,7 @@ public class Executor {
     //debug mode
     public boolean debug = false;
     // ast
-    private ASAst ast;
+    private Parser parser;
     private JSONObject context = null;
     private String[] anciennesLignes = null;
     // failsafe
@@ -81,9 +81,9 @@ public class Executor {
     private boolean canExecute = false;
 
     public Executor() {
-        lexer = new ASLexer();
+        lexer = new Lexer();
         moduleManager = new ASModuleManager(this);
-        ast = new ASAst(this);
+        parser = new Parser(this);
     }
 
     public static void main(String[] args) {
@@ -145,7 +145,7 @@ public class Executor {
     /**
      * @return le lexer utilise par l'interpreteur (voir ASLexer)
      */
-    public ASLexer getLexer() {
+    public Lexer getLexer() {
         return lexer;
     }
 
@@ -246,12 +246,12 @@ public class Executor {
     /**
      * @return le parser utilise par l'interpreteur (voir ASAst)
      */
-    public ASAst getAst() {
-        return ast;
+    public Parser getParser() {
+        return parser;
     }
 
-    public void setAst(ASAst ast) {
-        this.ast = ast;
+    public void setParser(Parser parser) {
+        this.parser = parser;
     }
 
     public ASModuleManager getAsModuleManager() {
@@ -427,7 +427,7 @@ public class Executor {
                         }
                     };
                 } else {
-                    ligneParsed = ast.parse(lineToken);
+                    ligneParsed = parser.parse(lineToken);
                 }
 
                 ligneParsed.setNumLine(i);
