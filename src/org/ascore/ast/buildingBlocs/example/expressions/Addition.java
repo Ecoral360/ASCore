@@ -1,4 +1,4 @@
-package org.ascore.ast.buildingBlocs.exemple.expressions;
+package org.ascore.ast.buildingBlocs.example.expressions;
 
 import org.ascore.ast.buildingBlocs.Expression;
 import org.ascore.lang.objects.datatype.ASEntier;

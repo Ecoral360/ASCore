@@ -30,36 +30,9 @@ public class ASScope {
 
     //#region --------- static stuff ---------
 
-    /**
-     * Crée un nouveau scope puis le met comme <code>currentScope</code>
-     *
-     * @return the new scope
-     */
-    public static ASScope makeNewCurrentScope() {
-        ASScope scope = new ASScope();
-        updateCurrentScope(scope);
-        return scope;
-    }
-
-    public static Stack<ASScope> getScopeStack() {
-        return scopeStack;
-    }
 
     public static ASScope getCurrentScope() {
         return scopeStack.peek();
-    }
-
-    public static void updateCurrentScope(ASScope scope) {
-        scopeStack.push(scope);
-    }
-
-    public static void popCurrentScope() {
-        scopeStack.pop();
-    }
-
-
-    public static Stack<ScopeInstance> getScopeInstanceStack() {
-        return scopeInstanceStack;
     }
 
     public static ScopeInstance getCurrentScopeInstance() {

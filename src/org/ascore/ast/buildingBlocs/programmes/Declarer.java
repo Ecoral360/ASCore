@@ -1,13 +1,13 @@
 package org.ascore.ast.buildingBlocs.programmes;
 
 
-import org.ascore.errors.ASError;
-import org.ascore.lang.objects.*;
-import org.ascore.lang.objects.datatype.ASNul;
-import org.ascore.lang.objects.ASObjet;
 import org.ascore.ast.buildingBlocs.Expression;
 import org.ascore.ast.buildingBlocs.Statement;
 import org.ascore.ast.buildingBlocs.expressions.Var;
+import org.ascore.errors.ASError;
+import org.ascore.lang.objects.*;
+import org.ascore.lang.objects.datatype.ASNul;
+import org.ascore.managers.scope.ASScopeManager;
 
 /**
  * Exemple d'un {@link Statement} charg\u00E9 de d\u00E9clarer une variable
@@ -17,6 +17,7 @@ import org.ascore.ast.buildingBlocs.expressions.Var;
  */
 public class Declarer extends Statement {
     private final Expression<?> valeur;
+    private final ASScopeManager scopeManager;
     private final boolean constante;
     private final ASType type;
     private final Var var;
@@ -32,12 +33,13 @@ public class Declarer extends Statement {
      * @param type      le type de la variable. Si <code>null</code>, vaut {@link ASTypeBuiltin#tout tout}
      * @param constante booleen indiquant si la variable est une constante
      */
-    public Declarer(Expression<?> expr, Expression<?> valeur, ASType type, boolean constante) {
+    public Declarer(ASScopeManager scopeManager, Expression<?> expr, Expression<?> valeur, ASType type, boolean constante) {
+        this.scopeManager = scopeManager;
         // get la variable
         if (expr instanceof Var) {
             var = (Var) expr;
         } else {
-            throw new ASError.ErreurSyntaxe("Seul les variables peuvent \u00EAtre d\u00E9clar\u00E9e, pas " + expr);
+            throw new ASError.ErreurSyntaxe("Seules les variables peuvent \u00EAtre d\u00E9clar\u00E9e, pas " + expr);
         }
 
         this.valeur = valeur;
@@ -52,7 +54,7 @@ public class Declarer extends Statement {
     private void addVariable() {
 
         // get l'objet variable s'il existe
-        ASVariable varObj = ASScope.getCurrentScope().getVariable(var.getNom());
+        ASVariable varObj = scopeManager.getCurrentScope().getVariable(var.getNom());
 
         // si la variable existe déjà et que c'est une constante, lance une erreur, car on ne peut pas modifier une constante
         if (varObj != null)
@@ -64,7 +66,7 @@ public class Declarer extends Statement {
                 ? new ASConstante(var.getNom(), null)
                 : new ASVariable(var.getNom(), null, type);
 
-        ASScope.getCurrentScope().declarerVariable(varObj);
+        scopeManager.getCurrentScope().declarerVariable(varObj);
 
         var.setNom(varObj.obtenirNom());
     }
@@ -78,7 +80,7 @@ public class Declarer extends Statement {
     @Override
     public Object execute() {
         //ASObjet.Variable variable = ASObjet.VariableManager.obtenirVariable(var.getNom());
-        ASVariable variable = ASScope.getCurrentScopeInstance().getVariable(var.getNom());
+        ASVariable variable = scopeManager.getCurrentScopeInstance().getVariable(var.getNom());
         if (this.valeur != null) {
             ASObjet<?> valeur = this.valeur.eval();
             variable.setValeur(valeur);

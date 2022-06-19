@@ -1,9 +1,9 @@
 package org.ascore.ast.buildingBlocs.expressions;
 
-import org.ascore.lang.objects.ASScope;
-import org.ascore.lang.objects.ASObjet;
 import org.ascore.ast.buildingBlocs.Expression;
 import org.ascore.errors.ASError;
+import org.ascore.lang.objects.ASObjet;
+import org.ascore.managers.scope.ASScopeManager;
 
 import java.util.Objects;
 
@@ -15,9 +15,11 @@ import java.util.Objects;
  */
 public class Var implements Expression<ASObjet<?>> {
     private String nom;
+    private final ASScopeManager scopeManager;
 
-    public Var(String nom) {
+    public Var(String nom, ASScopeManager scopeManager) {
         this.nom = nom;
+        this.scopeManager = scopeManager;
     }
 
     public String getNom() {
@@ -35,7 +37,7 @@ public class Var implements Expression<ASObjet<?>> {
     public ASObjet<?> eval() {
         try {
             // return ASObjet.VariableManager.obtenirVariable(this.nom).getValeurApresGetter();
-            return ASScope.getCurrentScopeInstance().getVariable(nom).getValeurApresGetter();
+            return scopeManager.getCurrentScopeInstance().getVariable(nom).getValeurApresGetter();
         } catch (NullPointerException e) {
             throw new ASError.ErreurVariableInconnue("La variable '" + this.nom + "' n'est pas d\u00E9clar\u00E9e dans ce scope.");
         }

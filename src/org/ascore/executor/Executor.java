@@ -625,9 +625,11 @@ public class Executor {
      * reset tout a neuf pour la prochaine execution
      */
     private void reset() {
-        ASScope.resetAllScope();
+        executorState.getScopeManager().resetAllScope();
+        executorState.getScopeManager().makeNewCurrentScope();
+        //ASScope.resetAllScope();
         // créer le scope global
-        ASScope.makeNewCurrentScope();
+        //ASScope.makeNewCurrentScope();
 
         // supprime les variables, fonctions et iterateurs de la memoire
         datas.clear();

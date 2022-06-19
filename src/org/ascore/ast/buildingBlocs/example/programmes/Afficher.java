@@ -1,4 +1,4 @@
-package org.ascore.ast.buildingBlocs.exemple.programmes;
+package org.ascore.ast.buildingBlocs.example.programmes;
 
 import org.ascore.ast.buildingBlocs.Expression;
 import org.ascore.ast.buildingBlocs.Statement;
@@ -15,8 +15,8 @@ public class Afficher extends Statement {
 
     @Override
     public Object execute() {
-        if (executorInstance != null)
-            executorInstance.ecrire(exprAfficher.eval().toString());
+        assert executorInstance != null;
+        executorInstance.ecrire(exprAfficher.eval().toString());
         return null;
     }
 }
