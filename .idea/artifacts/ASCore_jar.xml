@@ -1,0 +1,11 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="ASCore:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/ASCore_jar</output-path>
+    <root id="archive" name="ASCore.jar">
+      <element id="module-output" name="ASCore" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/snakeyaml-1.28.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/dotenv-java-2.2.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/json-20140107.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

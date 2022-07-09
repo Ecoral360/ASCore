@@ -10,10 +10,19 @@ import org.ascore.generators.lexer.LexerLoader;
  * @author Mathis Laroche
  */ 
 public class Lexer extends LexerGenerator {
-	public Lexer() {
-        super();
-        LexerLoader loader = new LexerLoader("ascore/regle_et_grammaire/Grammar.yaml");
-        loader.load();
-        sortTokenRules();
+    private final LexerLoader loader;
+
+    public Lexer() {
+        this("ascore/grammar_rules/Grammar.yaml");
+    }
+
+    public Lexer(String fileName) {
+        this.loader = new LexerLoader(fileName);
+        this.loader.load();
+        this.sortTokenRules();
+    }
+
+    public LexerLoader getLoader() {
+        return this.loader;
     }
 }

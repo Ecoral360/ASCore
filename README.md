@@ -17,7 +17,7 @@ _If someone wants to write the steps for the installation with another IDE, feel
 
 1. Install [IntelliJ IDEA™](https://www.jetbrains.com/idea/download/) (the community version is more than enough)
 2. Create a new project from version control and clone ASCore
-3. Go to src/Main.java
+3. Go to src/org.ascore.Main.java
 4. Run it
 5. If the terminal prints: `Welcome to ASCore!`, you're all set!
 

@@ -2,10 +2,13 @@ package org.ascore.generators.lexer;
 
 import org.ascore.tokens.Token;
 import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.error.YAMLException;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Classe responsable de charger les {@link TokenRule} du langage avec lesquelles seront contruits les
@@ -20,9 +23,46 @@ public class LexerLoader extends LexerGenerator {
         if (fileName == null) fileName = "ascore/grammar_rules/Grammar.yaml";
 
         Yaml yaml = new Yaml();
-        InputStream input = this.getClass().getClassLoader().getResourceAsStream(fileName);
-        this.dict = yaml.load(input);
 
+        InputStream input = this.getClass().getResourceAsStream(fileName);
+        if (input == null) {
+            throw new RuntimeException("File not found: " + fileName);
+        }
+        try {
+            this.dict = yaml.load(input);
+        } catch (YAMLException exception) {
+            try {
+                input.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            throw exception;
+        }
+    }
+
+    public LexerLoader(InputStream stream) {
+        this.dict = new Yaml().load(stream);
+    }
+
+    public Map<String, ?> getDict() {
+        return dict;
+    }
+
+    @SuppressWarnings("unchecked")
+    public Map<String, ?> getAddedRules() {
+
+        return Objects.requireNonNullElse(
+                (Map<String, ?>) dict.get("Ajouter"),
+                (Map<String, ?>) dict.get("Add")
+        );
+    }
+
+    @SuppressWarnings("unchecked")
+    public Map<String, ?> getIgnoredRules() {
+        return Objects.requireNonNullElse(
+                (Map<String, ?>) dict.get("Ignorer"),
+                (Map<String, ?>) dict.get("Ignore")
+        );
     }
 
     @SuppressWarnings("unchecked")
