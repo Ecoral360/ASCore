@@ -1,17 +1,17 @@
 package test.utils;
 
 
-import org.ascore.executor.Executor;
+import org.ascore.executor.ASCExecutor;
 import org.json.JSONArray;
 
 import static org.junit.Assert.*;
 
 public class AliveScriptTester {
-    private static Executor executor = null;
+    private static ASCExecutor executor = null;
     private static ASCoreExecutionTester executionTester = null;
 
     public static void resetExecuteur(boolean debug) {
-        executor = new Executor();
+        executor = new ASCExecutor();
         executor.debug = debug;
         executionTester = null;
     }

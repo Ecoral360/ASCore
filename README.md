@@ -2,7 +2,7 @@
 
 # ASCore : The core behind the AliveScript programming langugage
 
-> With ASCore, create your own programming language easly, all in Java!
+> With ASCore, create your own programming main.language easly, all in Java!
 
 ![Java Version][java-version]
 
@@ -37,7 +37,7 @@ _For more examples and usage, please refer to the [Wiki][wiki]._
 
 ## Getting started
 
-To make your first programming language:
+To make your first programming main.language:
 
 _To learn more about the Aliot-cli, please refer to the [Wiki][wiki]._
 
