@@ -1,6 +1,6 @@
 package org.ascore.lang.objects.datatype;
 
-import org.ascore.errors.ASError;
+import org.ascore.errors.ASCErrors;
 import org.ascore.tokens.Token;
 
 import java.util.Objects;
@@ -12,8 +12,8 @@ public class ASEntier implements ASNombre {
         try {
             this.valeur = Integer.parseInt(valeur.getValue());
         } catch (NumberFormatException e) {
-            throw new ASError.ErreurEntierInvalide("Les nombres entiers doivent avoir une valeur entre "
-                                                   + Integer.MIN_VALUE + " et " + Integer.MAX_VALUE);
+            throw new ASCErrors.ErreurEntierInvalide("Les nombres entiers doivent avoir une valeur entre "
+                                                     + Integer.MIN_VALUE + " et " + Integer.MAX_VALUE);
         }
     }
 
@@ -21,8 +21,8 @@ public class ASEntier implements ASNombre {
         try {
             this.valeur = valeur.intValue();
         } catch (NumberFormatException e) {
-            throw new ASError.ErreurEntierInvalide("Les nombres entiers doivent avoir une valeur entre "
-                                                   + Integer.MIN_VALUE + " et " + Integer.MAX_VALUE);
+            throw new ASCErrors.ErreurEntierInvalide("Les nombres entiers doivent avoir une valeur entre "
+                                                     + Integer.MIN_VALUE + " et " + Integer.MAX_VALUE);
         }
     }
 
@@ -30,7 +30,7 @@ public class ASEntier implements ASNombre {
         try {
             this.valeur = Integer.parseInt(valeur);
         } catch (NumberFormatException err) {
-            throw new ASError.ErreurType("La valeur " + valeur + " ne peut pas \u00EAtre convertie en nombre entier.");
+            throw new ASCErrors.ErreurType("La valeur " + valeur + " ne peut pas \u00EAtre convertie en nombre entier.");
         }
     }
 

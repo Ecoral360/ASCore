@@ -4,7 +4,7 @@ package org.ascore.ast.buildingBlocs.programmes;
 import org.ascore.ast.buildingBlocs.Expression;
 import org.ascore.ast.buildingBlocs.Statement;
 import org.ascore.ast.buildingBlocs.expressions.Var;
-import org.ascore.errors.ASError;
+import org.ascore.errors.ASCErrors;
 import org.ascore.lang.objects.*;
 import org.ascore.lang.objects.datatype.ASNul;
 import org.ascore.managers.scope.ASScopeManager;
@@ -39,7 +39,7 @@ public class Declarer extends Statement {
         if (expr instanceof Var) {
             var = (Var) expr;
         } else {
-            throw new ASError.ErreurSyntaxe("Seules les variables peuvent \u00EAtre d\u00E9clar\u00E9e, pas " + expr);
+            throw new ASCErrors.ErreurSyntaxe("Seules les variables peuvent \u00EAtre d\u00E9clar\u00E9e, pas " + expr);
         }
 
         this.valeur = valeur;
@@ -58,7 +58,7 @@ public class Declarer extends Statement {
 
         // si la variable existe déjà et que c'est une constante, lance une erreur, car on ne peut pas modifier une constante
         if (varObj != null)
-            throw new ASError.ErreurAssignement("La variable '" + var.getNom() + "' a d\u00E9j\u00E0 \u00E9t\u00E9 d\u00E9clar\u00E9e");
+            throw new ASCErrors.ErreurAssignement("La variable '" + var.getNom() + "' a d\u00E9j\u00E0 \u00E9t\u00E9 d\u00E9clar\u00E9e");
 
         // si le mot "const" est présent dans l'assignement de la variable, on crée la constante
         // sinon si la variable a été déclarée avec "var", on crée la variable

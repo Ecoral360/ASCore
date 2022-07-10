@@ -1,6 +1,6 @@
 package org.ascore.lang.modules.corekotlin
 
-import org.ascore.errors.ASError
+import org.ascore.errors.ASCErrors
 import org.ascore.lang.objects.ASParametre
 import org.ascore.lang.objects.ASScope
 import org.ascore.lang.objects.ASTypeBuiltin
@@ -30,7 +30,7 @@ object ModuleBuiltin : ASModuleFactory {
             ) {
                 val nomVar = it.getValeurParam("nomVariable").value as String
                 val variable = ASScope.getCurrentScopeInstance().getVariable(nomVar)
-                    ?: throw ASError.ErreurVariableInconnue("La variable '$nomVar' n'est pas d\u00E9clar\u00E9e dans ce scope.")
+                    ?: throw ASCErrors.ErreurVariableInconnue("La variable '$nomVar' n'est pas d\u00E9clar\u00E9e dans ce scope.")
                 variable.valeurApresGetter
             }
         )

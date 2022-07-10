@@ -1,6 +1,6 @@
 package org.ascore.lang.objects.datatype;
 
-import org.ascore.errors.ASError;
+import org.ascore.errors.ASCErrors;
 import org.ascore.lang.objects.ASObjet;
 
 import java.util.Iterator;
@@ -26,7 +26,7 @@ public interface ASIterable<T> extends ASObjet<T> {
 
     default int idxRelatif(List<?> valeur, int idx) {
         if (Math.abs(idx) > valeur.size()) {
-            throw new ASError.ErreurIndex("l'index est trop grand");
+            throw new ASCErrors.ErreurIndex("l'index est trop grand");
         }
         idx = (idx < 0) ? valeur.size() + idx : idx;
         return idx;

@@ -8,17 +8,17 @@ import org.ascore.managers.data.Data;
  *
  * @author Mathis
  */
-public interface ASError {
+public interface ASCErrors {
 
-    class ErreurAliveScript extends RuntimeException {
+    class ASCError extends RuntimeException {
         private final String nomErreur;
 
-        public ErreurAliveScript(String message, String nomErreur) {
+        public ASCError(String message, String nomErreur) {
             super(message);
             this.nomErreur = nomErreur;
         }
 
-        public Data getAsData(ASCExecutor executorInstance) {
+        public Data getAsData(ASCExecutor<?> executorInstance) {
             int ligne = executorInstance.getLineFromCoord(executorInstance.obtenirCoordRunTime()) + 1;
             return new Data(Data.Id.ERREUR).addParam(nomErreur).addParam(super.getMessage()).addParam(ligne);
         }
@@ -27,13 +27,13 @@ public interface ASError {
             return new Data(Data.Id.ERREUR).addParam(nomErreur).addParam(super.getMessage()).addParam(ligne);
         }
 
-        public void afficher(ASCExecutor executorInstance) {
+        public void afficher(ASCExecutor<?> executorInstance) {
             int ligne = executorInstance.getLineFromCoord(executorInstance.obtenirCoordRunTime()) + 1;
             executorInstance.ecrire(this.nomErreur + " (à la ligne " + ligne
                                     + ") -> " + super.getMessage());
         }
 
-        public void afficher(ASCExecutor executorInstance, int ligne) {
+        public void afficher(ASCExecutor<?> executorInstance, int ligne) {
             executorInstance.ecrire(this.nomErreur + " (à la ligne " + ligne
                                     + ") -> " + super.getMessage());
         }
@@ -84,7 +84,7 @@ public interface ASError {
 
     //-----------------------------------------------Erreurs Executions-------------------------------------------
 
-    class ErreurFermeture extends ErreurAliveScript {
+    class ErreurFermeture extends ASCError {
 
         public ErreurFermeture(String blocActuel) {
             super("le bloc: '" + blocActuel + "' n'a pas été fermé.", "ErreurFermeture");
@@ -101,25 +101,25 @@ public interface ASError {
         }
     }
 
-    class ErreurContexteAbsent extends ErreurAliveScript {
+    class ErreurContexteAbsent extends ASCError {
         public ErreurContexteAbsent(String message) {
             super(message, "ErreurContexteAbsent");
         }
     }
 
-    class ErreurSyntaxe extends ErreurAliveScript {
+    class ErreurSyntaxe extends ASCError {
         public ErreurSyntaxe(String message) {
             super(message, "ErreurSyntaxe");
         }
     }
 
-    class ErreurModule extends ErreurAliveScript {
+    class ErreurModule extends ASCError {
         public ErreurModule(String message) {
             super(message, "ErreurModule");
         }
     }
 
-    class ErreurAppelFonction extends ErreurAliveScript {
+    class ErreurAppelFonction extends ASCError {
         public ErreurAppelFonction(String message) {
             super(message, "ErreurAppelFonction");
         }
@@ -129,73 +129,73 @@ public interface ASError {
         }
     }
 
-    class ErreurBoucleInfini extends ErreurAliveScript {
+    class ErreurBoucleInfini extends ASCError {
         public ErreurBoucleInfini(String message) {
             super(message, "ErreurBoucleInfini");
         }
     }
 
-    class ErreurInputOutput extends ErreurAliveScript {
+    class ErreurInputOutput extends ASCError {
         public ErreurInputOutput(String message) {
             super(message, "ErreurInputOutput");
         }
     }
 
-    class ErreurAssignement extends ErreurAliveScript {
+    class ErreurAssignement extends ASCError {
         public ErreurAssignement(String message) {
             super(message, "ErreurAssignement");
         }
     }
 
-    class ErreurDeclaration extends ErreurAliveScript {
+    class ErreurDeclaration extends ASCError {
         public ErreurDeclaration(String message) {
             super(message, "ErreurDeclaration");
         }
     }
 
-    class ErreurType extends ErreurAliveScript {
+    class ErreurType extends ASCError {
         public ErreurType(String message) {
             super(message, "ErreurType");
         }
     }
 
-    class ErreurClef extends ErreurAliveScript {
+    class ErreurClef extends ASCError {
         public ErreurClef(String clef) {
             super("La clef " + clef + " n'est pas pr\u00E9sente dans le dict ou la liste", "ErreurClef");
         }
     }
 
-    class ErreurClefDupliquee extends ErreurAliveScript {
+    class ErreurClefDupliquee extends ASCError {
         public ErreurClefDupliquee(String msg) {
             super(msg, "ErreurClef");
         }
     }
 
-    class ErreurIndex extends ErreurAliveScript {
+    class ErreurIndex extends ASCError {
         public ErreurIndex(String message) {
             super(message, "ErreurIndex");
         }
     }
 
-    class ErreurVariableInconnue extends ErreurAliveScript {
+    class ErreurVariableInconnue extends ASCError {
         public ErreurVariableInconnue(String message) {
             super(message, "ErreurVariableInconnue");
         }
     }
 
-    class ErreurComparaison extends ErreurAliveScript {
+    class ErreurComparaison extends ASCError {
         public ErreurComparaison(String message) {
             super(message, "ErreurComparaison");
         }
     }
 
-    class ErreurFormatage extends ErreurAliveScript {
+    class ErreurFormatage extends ASCError {
         public ErreurFormatage(String message) {
             super(message, "ErreurFormatage");
         }
     }
 
-    class ErreurSuite extends ErreurAliveScript {
+    class ErreurSuite extends ASCError {
         public ErreurSuite(String message) {
             super(message, "ErreurSuite");
         }
@@ -204,31 +204,31 @@ public interface ASError {
 
     //-------------------------  Erreur de mathématiques  -----------------------------//
 
-    class ErreurEntierInvalide extends ErreurAliveScript {
+    class ErreurEntierInvalide extends ASCError {
         public ErreurEntierInvalide(String message) {
             super(message, "ErreurEntierInvalide");
         }
     }
 
-    class ErreurArithmetique extends ErreurAliveScript {
+    class ErreurArithmetique extends ASCError {
         public ErreurArithmetique(String message) {
             super(message, "ErreurArithmetique");
         }
     }
 
-    class ErreurDivisionParZero extends ErreurAliveScript {
+    class ErreurDivisionParZero extends ASCError {
         public ErreurDivisionParZero(String message) {
             super(message, "ErreurDivisionParZero");
         }
     }
 
-    class ErreurModuloZero extends ErreurAliveScript {
+    class ErreurModuloZero extends ASCError {
         public ErreurModuloZero(String message) {
             super(message, "ErreurModuloZero");
         }
     }
 
-    class ErreurZeroExposantZero extends ErreurAliveScript {
+    class ErreurZeroExposantZero extends ASCError {
         public ErreurZeroExposantZero(String message) {
             super(message, "ErreurExposantZero");
         }
@@ -244,7 +244,7 @@ public interface ASError {
             this.message = message;
         }
 
-        public void afficher(ASCExecutor executorInstance) {
+        public void afficher(ASCExecutor<?> executorInstance) {
             int ligne = executorInstance.getLineFromCoord(executorInstance.obtenirCoordRunTime()) + 1;
             executorInstance.ecrire("Durant l'execution à la ligne " + ligne
                                     + " -> " + this.getClass().getSimpleName() + " : " + this.message);

@@ -1,7 +1,7 @@
 package org.ascore.lang.objects;
 
 import org.ascore.ast.buildingBlocs.Expression;
-import org.ascore.errors.ASError;
+import org.ascore.errors.ASCErrors;
 
 import java.util.Arrays;
 import java.util.List;
@@ -74,7 +74,7 @@ public class ASType implements Expression<ASObjet<?>> {
         if ((var = ASScope.getCurrentScopeInstance().getVariable(this.nom)) != null) {
             return var.getValeurApresGetter();
         }
-        throw new ASError.ErreurType("Il est impossible d'\u00E9valuer le type '" + this.nom + "'");
+        throw new ASCErrors.ErreurType("Il est impossible d'\u00E9valuer le type '" + this.nom + "'");
     }
 
     @Override

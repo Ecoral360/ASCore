@@ -1,8 +1,8 @@
 package org.ascore.lang.objects.datatype;
 
+import org.ascore.errors.ASCErrors;
 import org.ascore.lang.objects.ASObjet;
 import org.ascore.tokens.Token;
-import org.ascore.errors.ASError;
 
 import java.util.Objects;
 
@@ -25,7 +25,7 @@ public class ASBooleen implements ASObjet<Boolean> {
         this.valeur = switch (valeur) {
             case "vrai" -> true;
             case "faux" -> false;
-            default -> throw new ASError.ErreurType("La valeur " + valeur + " ne peut pas \u00EAtre convertie en bool\u00E9en.");
+            default -> throw new ASCErrors.ErreurType("La valeur " + valeur + " ne peut pas \u00EAtre convertie en bool\u00E9en.");
         };
     }
 

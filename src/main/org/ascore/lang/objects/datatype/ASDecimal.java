@@ -1,7 +1,7 @@
 package org.ascore.lang.objects.datatype;
 
 import org.ascore.tokens.Token;
-import org.ascore.errors.ASError;
+import org.ascore.errors.ASCErrors;
 
 import java.util.Objects;
 
@@ -23,7 +23,7 @@ public class ASDecimal implements ASNombre {
         try {
             this.valeur = Double.parseDouble(valeur);
         } catch (NumberFormatException err) {
-            throw new ASError.ErreurType("La valeur " + valeur + " ne peut pas \u00EAtre convertie en nombre d\u00E9cimal.");
+            throw new ASCErrors.ErreurType("La valeur " + valeur + " ne peut pas \u00EAtre convertie en nombre d\u00E9cimal.");
         }
     }
 

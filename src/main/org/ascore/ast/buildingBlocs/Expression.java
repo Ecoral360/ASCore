@@ -2,6 +2,7 @@ package org.ascore.ast.buildingBlocs;
 
 import org.ascore.lang.objects.ASCObject;
 import org.ascore.lang.objects.ASObjet;
+import org.ascore.lang.objects.datatype.ASNul;
 
 import java.io.Serializable;
 
@@ -25,7 +26,7 @@ public interface Expression<T extends ASCObject<?>> extends Serializable {
 
         @Override
         public ASCObject<?> eval() {
-            return null;
+            return new ASNul();
         }
     }
 }

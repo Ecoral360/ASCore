@@ -18,14 +18,14 @@ import java.util.List;
  * @author Mathis Laroche
  */
 public abstract class Statement implements Serializable {
-    protected final ASCExecutor executorInstance;
+    protected final ASCExecutor<?> executorInstance;
     private int numLigne = -1;
 
     protected Statement() {
         this.executorInstance = null;
     }
 
-    protected Statement(@NotNull ASCExecutor executorInstance) {
+    protected Statement(@NotNull ASCExecutor<?> executorInstance) {
         this.executorInstance = executorInstance;
     }
 
@@ -74,6 +74,7 @@ public abstract class Statement implements Serializable {
     public String toString() {
         return "vide";
     }
+
 
     /**
      * INDIQUE LA FIN DU PROGRAMME

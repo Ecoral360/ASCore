@@ -2,8 +2,8 @@ package org.ascore.executor;
 
 import io.github.cdimascio.dotenv.Dotenv;
 import org.ascore.ast.buildingBlocs.Statement;
-import org.ascore.errors.ASError;
-import org.ascore.errors.ASError.*;
+import org.ascore.errors.ASCErrors;
+import org.ascore.errors.ASCErrors.*;
 import org.ascore.generators.ast.AstGenerator;
 import org.ascore.generators.lexer.LexerGenerator;
 import org.ascore.lang.ASCLexer;
@@ -220,14 +220,14 @@ public class ASCExecutor<ExecutorState extends ASCExecutorState> {
             Data dataToGet = new Data(Data.Id.GET).addParam(dataName);
             for (var param : additionnalParams)
                 dataToGet.addParam(param);
-            throw new ASError.StopGetInfo(dataToGet);
+            throw new ASCErrors.StopGetInfo(dataToGet);
         } else
             return this.dataResponse.pop();
     }
 
     public JSONObject getContext() {
         if (context == null)
-            throw new ASError.ErreurContexteAbsent("Il n'y a pas de contexte");
+            throw new ASCErrors.ErreurContexteAbsent("Il n'y a pas de contexte");
         return context;
     }
 
@@ -475,7 +475,7 @@ public class ASCExecutor<ExecutorState extends ASCExecutorState> {
                     throw new ErreurFermeture(scopeActuel);
                 }
 
-            } catch (ErreurAliveScript err) {
+            } catch (ASCErrors.ASCError err) {
                 canExecute = false;
                 compilationActive = false;
                 err.afficher(this, i + 1);
@@ -502,7 +502,7 @@ public class ASCExecutor<ExecutorState extends ASCExecutorState> {
 //            if (!ASFonctionManager.obtenirStructure().isBlank()) {
 //                throw new ErreurFermeture(ASFonctionManager.obtenirStructure());
 //            }
-        } catch (ErreurAliveScript err) {
+        } catch (ASCErrors.ASCError err) {
             canExecute = false;
             compilationActive = false;
             err.afficher(this, lignes.length);
@@ -545,26 +545,26 @@ public class ASCExecutor<ExecutorState extends ASCExecutorState> {
                 break;
             }
 
-            var resultPair = executeStatement(statement);
-            if (resultPair.first() == null) { // if the first element is null, it means that to return the second element as is
-                return resultPair.second();
-            } else if (resultPair.first()) { // if the first element is true, it means that to set the result as the second element and continue
-                result = resultPair.second();
-            } else {                         // if the first element is false, it means that to set the result as the second element and break
-                result = resultPair.second();
-                break;
-            }
+//            var resultPair = executeStatement(statement);
+//            if (resultPair.first() == null) { // if the first element is null, it means that to return the second element as is
+//                return resultPair.second();
+//            } else if (resultPair.first()) { // if the first element is true, it means that to set the result as the second element and continue
+//                result = resultPair.second();
+//            } else {                         // if the first element is false, it means that to set the result as the second element and break
+//                result = resultPair.second();
+//                break;
+//            }
 
 
             // s'il y a une erreur dans l'execution, on arr�te l'execution et on �crit le message d'erreur dans la console de l'app
-            /*try {
+            try {
                 // execution de la ligne et enregistrement du resultat dans la variable du meme nom
-                resultat = ligneParsed.execute();
+                result = statement.execute();
 
-                if (resultat instanceof Data) {
-                    datas.add((Data) resultat);
+                if (result instanceof Data) {
+                    datas.add((Data) result);
 
-                } else if (resultat != null && !coordRunTime.getScope().equals("main")) {
+                } else if (result != null && !coordRunTime.getScope().equals("main")) {
                     // ne sera vrai que si l'on retourne d'une fonction
                     break;
                 }
@@ -584,13 +584,13 @@ public class ASCExecutor<ExecutorState extends ASCExecutorState> {
             } catch (StopSetInfo e) {
                 datas.add(e.getData());
 
-            } catch (ErreurAliveScript e) {
+            } catch (ASCErrors.ASCError e) {
                 // si l'erreur lancee est de type ASErreur.ErreurExecution (Voir ASErreur.java),
                 // on l'affiche et on arrete l'execution du programme
                 datas.add(e.getAsData(this));
                 arreterExecution();
                 e.afficher(this);
-                resultat = null;
+                result = null;
                 break;
 
             } catch (RuntimeException e) {
@@ -601,16 +601,16 @@ public class ASCExecutor<ExecutorState extends ASCExecutorState> {
                         .getAsData(this));
                 if (debug) System.out.println(coordRunTime);
                 arreterExecution();
-                resultat = null;
+                result = null;
                 break;
             }
             // on passe a la coordonnee suivante
-            coordRunTime.plusUn();*/
+            coordRunTime.plusUn();
         }
         return (statement instanceof Statement.EndOfProgramStatement || !executionActive || result == null) ? datas.toString() : result;
     }
 
-    public Object executerCodeBlock(String block, String startCoord) {
+    public Object executeCodeBlock(String block, String startCoord) {
         // set the coordinate to the start of the code block
         if (startCoord == null) coordRunTime.nouveauBloc(block);
         else coordRunTime.setCoord(startCoord);
@@ -620,14 +620,14 @@ public class ASCExecutor<ExecutorState extends ASCExecutorState> {
         var currentBlock = coordRunTime.copy();
 
         Object result = "[]";
-        Statement ligneParsed = null;
+        Statement statement = null;
 
         while (executionActive && canExecute && currentBlock.isSubCoordinate(coordRunTime)) {
             // System.out.println(coordRunTime);
             // get la ligne a executer dans le dictionnaire de coordonnees
-            ligneParsed = scope.get(coordRunTime.toString());
+            statement = scope.get(coordRunTime.toString());
 
-            if (ligneParsed instanceof Statement.EndOfProgramStatement) { // ne sera vrai que si cela est la derniere ligne du programme
+            if (statement instanceof Statement.EndOfProgramStatement) {
                 coordRunTime.setCoord(null);
                 executionActive = false;
                 break;
@@ -635,17 +635,53 @@ public class ASCExecutor<ExecutorState extends ASCExecutorState> {
 
 
             // s'il y a une erreur dans l'execution, on arr�te l'execution et on �crit le message d'erreur dans la console de l'app
-            var resultPair = executeStatement(ligneParsed);
-            if (resultPair.first() == null) { // if the first element is null, it means that to return the second element as is
-                return resultPair.second();
-            } else if (resultPair.first()) { // if the first element is true, it means that to set the result as the second element and continue
-                result = resultPair.second();
-            } else {                         // if the first element is false, it means that to set the result as the second element and break
-                result = resultPair.second();
+            try {
+                // execution de la ligne et enregistrement du resultat dans la variable du meme nom
+                result = statement.execute();
+
+                if (result instanceof Data) {
+                    datas.add((Data) result);
+                }
+
+                if (datas.size() >= MAX_DATA_BEFORE_SEND) {
+                    synchronized (datas) {
+                        return datas.toString();
+                    }
+                }
+            } catch (StopSendData e) {
+                return e.getDataString();
+
+            } catch (StopGetInfo e) {
+                datas.add(e.getData());
+                return datas.toString();
+
+            } catch (StopSetInfo e) {
+                datas.add(e.getData());
+
+            } catch (ASCErrors.ASCError e) {
+                // si l'erreur lancee est de type ASErreur.ErreurExecution (Voir ASErreur.java),
+                // on l'affiche et on arrete l'execution du programme
+                datas.add(e.getAsData(this));
+                arreterExecution();
+                e.afficher(this);
+                result = null;
+                break;
+
+            } catch (RuntimeException e) {
+                // s'il y a une erreur, mais que ce n'est pas une erreur se trouvant dans ASErreur, c'est une
+                // erreur de syntaxe, comme l'autre type d'erreur, on l'affiche et on arrete l'execution du programme
+                e.printStackTrace();
+                datas.add(new ErreurSyntaxe("Une erreur interne inconnue est survenue lors de l'ex\u00E9cution de la ligne, v\u00E9rifiez que la syntaxe est valide")
+                        .getAsData(this));
+                if (debug) System.out.println(coordRunTime);
+                arreterExecution();
+                result = null;
                 break;
             }
+            // on passe a la coordonnee suivante
+            coordRunTime.plusUn();
         }
-        return (ligneParsed instanceof Statement.EndOfProgramStatement || !executionActive || result == null) ? datas.toString() : result;
+        return (statement instanceof Statement.EndOfProgramStatement || !executionActive || result == null) ? datas.toString() : result;
     }
 
 
@@ -686,7 +722,7 @@ public class ASCExecutor<ExecutorState extends ASCExecutorState> {
         } catch (StopSetInfo e) {
             datas.add(e.getData());
 
-        } catch (ErreurAliveScript e) {
+        } catch (ASCErrors.ASCError e) {
             // si l'erreur lancee est de type ASErreur.ErreurExecution (Voir ASErreur.java),
             // on l'affiche et on arrete l'execution du programme
             datas.add(e.getAsData(this));
@@ -721,16 +757,22 @@ public class ASCExecutor<ExecutorState extends ASCExecutorState> {
             return new JSONArray();
         }
 
-        Object resultat;
+        String result;
 
         if (!resume) {
             // créer scopeInstance globale
-            executorState.getScopeManager().pushCurrentScopeInstance(executorState
-                    .getScopeManager().getCurrentScope().makeScopeInstance(null));
-            resultat = executerScope("main", null, null);
-        } else resultat = resumeExecution();
+            executorState
+                    .getScopeManager()
+                    .pushCurrentScopeInstance(executorState
+                            .getScopeManager()
+                            .getCurrentScope()
+                            .makeScopeInstance(null));
+            executerScope("main", null, null);
+        } else resumeExecution();
 
-        var returnData = new JSONArray(resultat.toString());
+        result = datas.toString();
+
+        var returnData = new JSONArray(result);
         /*
          * affiche si l'execution s'est deroulee sans probleme ou si elle a ete interrompue par une erreur
          * affiche le temps qu'a pris l'execution du programme (au complet ou jusqu'a l'interruption)

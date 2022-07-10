@@ -1,6 +1,6 @@
 package org.ascore.generators.ast;
 
-import org.ascore.errors.ASError;
+import org.ascore.errors.ASCErrors;
 import org.ascore.ast.AstNode;
 import org.ascore.ast.buildingBlocs.Expression;
 import org.ascore.ast.buildingBlocs.Statement;
@@ -42,20 +42,20 @@ public class AstGenerator<AstFrameKind extends Enum<?>> {
         //System.out.println(Arrays.toString(expressionArray));
 
         switch (Integer.compare(parentheses, 0)) {
-            case -1 -> throw new ASError.ErreurSyntaxe(-parentheses + " parenth\u00E8se" + pluriel + " ouvrante" + pluriel + " '(' manquante" + pluriel);
-            case 1 -> throw new ASError.ErreurSyntaxe(parentheses + " parenth\u00E8se" + pluriel + " fermante" + pluriel + " ')' manquante" + pluriel);
+            case -1 -> throw new ASCErrors.ErreurSyntaxe(-parentheses + " parenth\u00E8se" + pluriel + " ouvrante" + pluriel + " '(' manquante" + pluriel);
+            case 1 -> throw new ASCErrors.ErreurSyntaxe(parentheses + " parenth\u00E8se" + pluriel + " fermante" + pluriel + " ')' manquante" + pluriel);
         }
 
         pluriel = Math.abs(braces) > 1 ? "s" : "";
         switch (Integer.compare(braces, 0)) {
-            case -1 -> throw new ASError.ErreurSyntaxe(-braces + " accolade" + pluriel + " ouvrante" + pluriel + " '{' manquante" + pluriel);
-            case 1 -> throw new ASError.ErreurSyntaxe(braces + " accolade" + pluriel + " fermante" + pluriel + " '}' manquante" + pluriel);
+            case -1 -> throw new ASCErrors.ErreurSyntaxe(-braces + " accolade" + pluriel + " ouvrante" + pluriel + " '{' manquante" + pluriel);
+            case 1 -> throw new ASCErrors.ErreurSyntaxe(braces + " accolade" + pluriel + " fermante" + pluriel + " '}' manquante" + pluriel);
         }
 
         pluriel = Math.abs(crochets) > 1 ? "s" : "";
         switch (Integer.compare(crochets, 0)) {
-            case -1 -> throw new ASError.ErreurSyntaxe(-crochets + " crochet" + pluriel + " ouvrant" + pluriel + " '[' manquant" + pluriel);
-            case 1 -> throw new ASError.ErreurSyntaxe(crochets + " crochet" + pluriel + " fermant" + pluriel + " ']' manquant" + pluriel);
+            case -1 -> throw new ASCErrors.ErreurSyntaxe(-crochets + " crochet" + pluriel + " ouvrant" + pluriel + " '[' manquant" + pluriel);
+            case 1 -> throw new ASCErrors.ErreurSyntaxe(crochets + " crochet" + pluriel + " fermant" + pluriel + " ']' manquant" + pluriel);
         }
 
     }
@@ -152,7 +152,7 @@ public class AstGenerator<AstFrameKind extends Enum<?>> {
     public Expression<?> evalOneExpr(ArrayList<Object> expressions, Hashtable<String, AstNode<? extends Expression<?>>> sous_ast) {
         var result = eval(expressions, sous_ast);
         if (result.size() != 1) {
-            throw new ASError.ErreurSyntaxe("Erreur ligne 106 dans AstGenerator");
+            throw new ASCErrors.ErreurSyntaxe("Erreur ligne 106 dans AstGenerator");
         } else {
             return result.get(0);
         }
@@ -264,7 +264,7 @@ public class AstGenerator<AstFrameKind extends Enum<?>> {
         Token[] token = expressionArray.stream().filter(e -> e instanceof Token).toArray(Token[]::new);
 
         if (token.length > 0) {
-            throw new ASError.ErreurSyntaxe("Expression ill\u00E9gale: " + String.join(" ", Arrays.stream(token).map(Token::getValue).toArray(String[]::new)));
+            throw new ASCErrors.ErreurSyntaxe("Expression ill\u00E9gale: " + String.join(" ", Arrays.stream(token).map(Token::getValue).toArray(String[]::new)));
         }
 
         //System.out.println(expressionArray);
@@ -392,7 +392,7 @@ public class AstGenerator<AstFrameKind extends Enum<?>> {
 
         //System.out.println(finalLine);
         if (expressionIt.hasNext()) {
-            throw new ASError.ErreurSyntaxe("Syntaxe invalide. Est-ce qu'il manque une virgule entre deux \u00E9l\u00E9ments?");
+            throw new ASCErrors.ErreurSyntaxe("Syntaxe invalide. Est-ce qu'il manque une virgule entre deux \u00E9l\u00E9ments?");
         }
 
         return programmesDict
@@ -403,7 +403,7 @@ public class AstGenerator<AstFrameKind extends Enum<?>> {
     /**
      * @param listToken the list of token making the lexed line
      * @return an entry composed of the variant idx as the key and the programme as the value
-     * @throws ASError.ErreurSyntaxe if there are no programme that match the tokens in listToken
+     * @throws ASCErrors.ErreurSyntaxe if there are no programme that match the tokens in listToken
      */
     public Map.Entry<Integer, String> getStatementOrThrow(List<Token> listToken) {
         var ordreProgrammes = currentStatementsOrder();
@@ -430,7 +430,7 @@ public class AstGenerator<AstFrameKind extends Enum<?>> {
             }
         }
         if (programmeTrouve == null) {
-            throw new ASError.ErreurSyntaxe("Syntaxe invalide: " + listToken
+            throw new ASCErrors.ErreurSyntaxe("Syntaxe invalide: " + listToken
                     .stream()
                     .map(Token::getValue)
                     .toList()

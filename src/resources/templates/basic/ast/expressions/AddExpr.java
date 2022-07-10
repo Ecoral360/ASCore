@@ -6,7 +6,7 @@ import mylang.objects.MyLangNumber;
 import mylang.objects.MyLangString;
 import org.ascore.ast.buildingBlocs.Expression;
 import org.ascore.ast.buildingBlocs.expressions.Var;
-import org.ascore.errors.ASError;
+import org.ascore.errors.ASCErrors;
 import org.ascore.lang.objects.ASCObject;
 
 /**
@@ -33,7 +33,7 @@ public record AddExpr(Expression<?> left, Expression<?> right) implements Expres
             var result = myLangNumberLeft.getValue().doubleValue() + myLangNumberRight.getValue().doubleValue();
             return result == (int) result ? new MyLangInt((int) result) : new MyLangFloat(result);
         } else {
-            throw new ASError.ErreurArithmetique(
+            throw new ASCErrors.ErreurArithmetique(
                     "Addition not supported for '" + leftValue.getClass().getSimpleName() +
                     "' and '" + rightValue.getClass().getSimpleName()
             );

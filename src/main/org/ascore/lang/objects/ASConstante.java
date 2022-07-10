@@ -1,6 +1,6 @@
 package org.ascore.lang.objects;
 
-import org.ascore.errors.ASError;
+import org.ascore.errors.ASCErrors;
 
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -18,18 +18,18 @@ public class ASConstante extends ASVariable {
 
     @Override
     public ASVariable setSetter(Function<ASObjet<?>, ASObjet<?>> setter) {
-        throw new ASError.ErreurAssignement("Les constantes ne peuvent pas avoir de setter");
+        throw new ASCErrors.ErreurAssignement("Les constantes ne peuvent pas avoir de setter");
     }
 
     @Override
     public ASVariable setGetter(Supplier<ASObjet<?>> getter) {
-        throw new ASError.ErreurAssignement("Les constantes ne peuvent pas avoir de getter");
+        throw new ASCErrors.ErreurAssignement("Les constantes ne peuvent pas avoir de getter");
     }
 
     @Override
     public void changerValeur(ASObjet<?> valeur) {
         if (this.getValeur() != null)
-            throw new ASError.ErreurAssignement("Il est impossible de changer la valeur d'une constante");
+            throw new ASCErrors.ErreurAssignement("Il est impossible de changer la valeur d'une constante");
         super.changerValeur(valeur);
     }
 }

@@ -1,7 +1,7 @@
 package org.ascore.lang.objects;
 
+import org.ascore.errors.ASCErrors;
 import org.ascore.executor.Coordinate;
-import org.ascore.errors.ASError;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -98,19 +98,19 @@ public abstract class ASFonctionModule implements ASObjet<Object> {
 
         if (paramsValeurs.size() < nonDefaultParams || paramsValeurs.size() > this.parametres.length) {
             if (nonDefaultParams == this.parametres.length) {
-                throw new ASError.ErreurAppelFonction(this.nom, "Le nombre de param\u00E8tres donn\u00E9s est '" + paramsValeurs.size() +
-                                                                "' alors que la fonction en prend '" + this.parametres.length + "'");
+                throw new ASCErrors.ErreurAppelFonction(this.nom, "Le nombre de param\u00E8tres donn\u00E9s est '" + paramsValeurs.size() +
+                                                                  "' alors que la fonction en prend '" + this.parametres.length + "'");
             } else {
-                throw new ASError.ErreurAppelFonction(this.nom, "Le nombre de param\u00E8tres donn\u00E9s est '" + paramsValeurs.size() +
-                                                                "' alors que la fonction en prend entre '" + nonDefaultParams + "' et '" + this.parametres.length + "'");
+                throw new ASCErrors.ErreurAppelFonction(this.nom, "Le nombre de param\u00E8tres donn\u00E9s est '" + paramsValeurs.size() +
+                                                                  "' alors que la fonction en prend entre '" + nonDefaultParams + "' et '" + this.parametres.length + "'");
             }
 
         }
         for (int i = 0; i < paramsValeurs.size(); i++) {
             ASParametre parametre = this.parametres[i];
             if (parametre.getType().noMatch(((ASObjet<?>) paramsValeurs.get(i)).obtenirNomType())) {
-                throw new ASError.ErreurType("Le param\u00E8tres '" + parametre.getNom() + "' est de type '" + parametre.getType().nom() +
-                                             "', mais l'argument pass\u00E9 est de type '" + ((ASObjet<?>) paramsValeurs.get(i)).obtenirNomType() + "'.");
+                throw new ASCErrors.ErreurType("Le param\u00E8tres '" + parametre.getNom() + "' est de type '" + parametre.getType().nom() +
+                                               "', mais l'argument pass\u00E9 est de type '" + ((ASObjet<?>) paramsValeurs.get(i)).obtenirNomType() + "'.");
             }
         }
         return true;
@@ -145,8 +145,8 @@ public abstract class ASFonctionModule implements ASObjet<Object> {
             for (ASObjet<?> param : paramsValeurs) {
                 if (param instanceof ASParametre parametre) {
                     if (Arrays.stream(parametres).noneMatch(p -> p.getNom().equals(parametre.getNom()))) {
-                        throw new ASError.ErreurAppelFonction("l'argument: " + parametre.getNom() + " pass\u00E9 en param\u00E8tre" +
-                                                              " ne correspond \u00E0 aucun param\u00E8tre d\u00E9fini dans la fonction '" + this.nom + "'");
+                        throw new ASCErrors.ErreurAppelFonction("l'argument: " + parametre.getNom() + " pass\u00E9 en param\u00E8tre" +
+                                                                " ne correspond \u00E0 aucun param\u00E8tre d\u00E9fini dans la fonction '" + this.nom + "'");
                     }
                     this.parametres_appel.put(parametre.getNom(), parametre.getValeurParDefaut());
                 }
@@ -159,8 +159,8 @@ public abstract class ASFonctionModule implements ASObjet<Object> {
 
                 } else {
                     if (param.getValeurParDefaut() == null) {
-                        throw new ASError.ErreurAppelFonction(this.nom, "l'argument: " + param.getNom() + " n'a pas reçu de valeur" +
-                                                                        "et ne poss\u00E8de aucune valeur par d\u00E9faut");
+                        throw new ASCErrors.ErreurAppelFonction(this.nom, "l'argument: " + param.getNom() + " n'a pas reçu de valeur" +
+                                                                          "et ne poss\u00E8de aucune valeur par d\u00E9faut");
                     }
                     this.parametres_appel.putIfAbsent(param.getNom(), param.getValeurParDefaut());
                 }
@@ -169,8 +169,8 @@ public abstract class ASFonctionModule implements ASObjet<Object> {
             for (ASParametre param : this.parametres) {
                 this.parametres_appel.computeIfAbsent(param.getNom(), (val) -> {
                     if (param.getValeurParDefaut() == null) {
-                        throw new ASError.ErreurAppelFonction(this.nom, "l'argument: " + param.getNom() + " n'a pas reçu de valeur" +
-                                                                        "et ne poss\u00E8de aucune valeur par d\u00E9faut");
+                        throw new ASCErrors.ErreurAppelFonction(this.nom, "l'argument: " + param.getNom() + " n'a pas reçu de valeur" +
+                                                                          "et ne poss\u00E8de aucune valeur par d\u00E9faut");
                     }
                     return param.getValeurParDefaut();
                 });

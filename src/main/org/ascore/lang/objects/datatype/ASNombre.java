@@ -1,6 +1,6 @@
 package org.ascore.lang.objects.datatype;
 
-import org.ascore.errors.ASError;
+import org.ascore.errors.ASCErrors;
 import org.ascore.lang.objects.ASObjet;
 
 public interface ASNombre extends ASObjet<Number> {
@@ -18,7 +18,7 @@ public interface ASNombre extends ASObjet<Number> {
     static ASNombre parse(ASObjet<?> nb) {
         String txt = nb.toString();
         if (!ASNombre.estNumerique(txt))
-            throw new ASError.ErreurType("Impossible de convertir " + txt + " en nombre entier ou d\u00E9cimal.");
+            throw new ASCErrors.ErreurType("Impossible de convertir " + txt + " en nombre entier ou d\u00E9cimal.");
 
         return txt.contains(".") ? new ASDecimal(Double.parseDouble(txt)) : new ASEntier(Integer.parseInt(txt));
     }
@@ -30,7 +30,7 @@ public interface ASNombre extends ASObjet<Number> {
     static Number asNumber(ASObjet<?> nb) {
         String txt = nb.toString();
         if (!ASNombre.estNumerique(txt))
-            throw new ASError.ErreurType("Impossible de convertir " + txt + " en nombre entier ou d\u00E9cimal.");
+            throw new ASCErrors.ErreurType("Impossible de convertir " + txt + " en nombre entier ou d\u00E9cimal.");
 
         return (Number) nb.getValue();
     }
@@ -38,7 +38,7 @@ public interface ASNombre extends ASObjet<Number> {
     static Double asDouble(ASObjet<?> nb) {
         String txt = nb.toString();
         if (!ASNombre.estNumerique(txt))
-            throw new ASError.ErreurType("Impossible de convertir " + txt + " en nombre entier ou d\u00E9cimal.");
+            throw new ASCErrors.ErreurType("Impossible de convertir " + txt + " en nombre entier ou d\u00E9cimal.");
 
         return ((Number) nb.getValue()).doubleValue();
     }
@@ -46,7 +46,7 @@ public interface ASNombre extends ASObjet<Number> {
     static Integer asInteger(ASObjet<?> nb) {
         String txt = nb.toString();
         if (!ASNombre.estNumerique(txt))
-            throw new ASError.ErreurType("Impossible de convertir " + txt + " en nombre entier ou d\u00E9cimal.");
+            throw new ASCErrors.ErreurType("Impossible de convertir " + txt + " en nombre entier ou d\u00E9cimal.");
 
         return ((Number) nb.getValue()).intValue();
     }

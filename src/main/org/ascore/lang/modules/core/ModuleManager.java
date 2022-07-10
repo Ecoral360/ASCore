@@ -1,12 +1,12 @@
 package org.ascore.lang.modules.core;
 
 
+import org.ascore.errors.ASCErrors;
 import org.ascore.executor.ASCExecutor;
 import org.ascore.lang.objects.ASConstante;
 import org.ascore.lang.objects.ASScope;
 import org.ascore.lang.objects.datatype.ASListe;
 import org.ascore.lang.objects.datatype.ASTexte;
-import org.ascore.errors.ASError;
 import org.ascore.lang.modules.EnumModule;
 
 import java.util.*;
@@ -48,7 +48,7 @@ public record ModuleManager(ASCExecutor executorInstance) {
 
     public void utiliserModule(String nomModule) {
         if (nomModule.equals("builtins")) {
-            new ASError.AlerteUtiliserBuiltins("Il est inutile d'utiliser builtins, puisqu'il est utilise par defaut");
+            new ASCErrors.AlerteUtiliserBuiltins("Il est inutile d'utiliser builtins, puisqu'il est utilise par defaut");
             return;
         }
 
@@ -73,7 +73,7 @@ public record ModuleManager(ASCExecutor executorInstance) {
      */
     public void utiliserModule(String nomModule, String[] methodes) {
         if (nomModule.equals("builtins")) {
-            new ASError.AlerteUtiliserBuiltins("Il est inutile d'utiliser builtins, puisque le module builtins est utilise par defaut");
+            new ASCErrors.AlerteUtiliserBuiltins("Il est inutile d'utiliser builtins, puisque le module builtins est utilise par defaut");
             return;
         }
 
@@ -85,8 +85,8 @@ public record ModuleManager(ASCExecutor executorInstance) {
         fctEtConstPasDansModule.removeAll(module.getNomsConstantesEtFonctions());
 
         if (fctEtConstPasDansModule.size() > 0)
-            throw new ASError.ErreurModule("Le module '" + nomModule + "' ne contient pas les fonctions ou les constantes: "
-                                           + fctEtConstPasDansModule.toString()
+            throw new ASCErrors.ErreurModule("Le module '" + nomModule + "' ne contient pas les fonctions ou les constantes: "
+                                             + fctEtConstPasDansModule.toString()
                     .replaceAll("\\[|]", ""));
 
         module.utiliser(nomsFctEtConstDemandees);
@@ -102,7 +102,7 @@ public record ModuleManager(ASCExecutor executorInstance) {
         try {
             module = MODULE_FACTORY.get(EnumModule.valueOf(nomModule));
         } catch (IllegalArgumentException err) {
-            throw new ASError.ErreurModule("Le module '" + nomModule + "' n'existe pas");
+            throw new ASCErrors.ErreurModule("Le module '" + nomModule + "' n'existe pas");
         }
         return module.load(executorInstance);
     }
