@@ -6,6 +6,7 @@ import mylang.ast.statements.PrintStmt;
 import mylang.objects.MyLangFloat;
 import mylang.objects.MyLangInt;
 import mylang.objects.MyLangString;
+import mylang.execution.MyLangExecutorState;
 import org.ascore.ast.buildingBlocs.Expression;
 import org.ascore.executor.ASCExecutor;
 import org.ascore.generators.ast.AstGenerator;
@@ -24,14 +25,14 @@ import java.util.NoSuchElementException;
  * </ul>
  */
 public class MyLangParser extends AstGenerator<MyLangAstFrameKind> {
-    private ASCExecutor executorInstance;
+    private ASCExecutor<MyLangExecutorState> executorInstance;
 
     /**
      * Constructor for the parser.
      *
      * @param executorInstance the executor instance to use for executing the AST
      */
-    public MyLangParser(ASCExecutor executorInstance) {
+    public MyLangParser(ASCExecutor<MyLangExecutorState> executorInstance) {
         reset();
         defineAstFrame(MyLangAstFrameKind.DEFAULT);
         addStatements();
@@ -40,7 +41,7 @@ public class MyLangParser extends AstGenerator<MyLangAstFrameKind> {
         this.executorInstance = executorInstance;
     }
 
-    public ASCExecutor getExecutorInstance() {
+    public ASCExecutor<MyLangExecutorState> getExecutorInstance() {
         return executorInstance;
     }
 
@@ -50,7 +51,7 @@ public class MyLangParser extends AstGenerator<MyLangAstFrameKind> {
      * @param executorInstance the executor instance to use for executing the AST
      * @throws IllegalStateException if the executor instance was already set
      */
-    public void setExecutorInstance(ASCExecutor executorInstance) {
+    public void setExecutorInstance(ASCExecutor<MyLangExecutorState> executorInstance) {
         if (this.executorInstance != null) {
             throw new IllegalStateException("executorInstance was already assigned");
         }
