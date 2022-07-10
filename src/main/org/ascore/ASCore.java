@@ -15,15 +15,11 @@ public class ASCore {
         var classLangName = langName.substring(0, 1).toUpperCase() + langName.substring(1);
         var packageName = langName.toLowerCase();
 
-        switch (template) {
-            case BLANK -> makeFromTemplate("/templates/blank", dest, langName, classLangName, packageName);
-        }
-    }
+        var resourcePath = "/templates/" + template.name().toLowerCase();
 
-    private static void makeFromTemplate(String resourcePath, String dest, String langName, String classLangName, String packageName) throws IOException {
         var templateURL = ASCore.class.getResource(resourcePath);
         if (templateURL == null) {
-            System.out.println("Files not found for template blank");
+            System.out.println("Files not found for template " + template.name().toLowerCase());
             return;
         }
         var templatePath = Paths.get(templateURL.getPath().substring(6));
@@ -85,6 +81,7 @@ public class ASCore {
     }
 
     public enum ProjectTemplate {
-        BLANK
+        BLANK,
+        BASIC
     }
 }

@@ -1,0 +1,12 @@
+Add:
+  PRINT: \bprint\b
+
+  datatypes:
+    INT: -?\d+
+    FLOAT: -?\d+\.\d+
+    STRING: '".*?"'
+
+  PLUS: \+
+
+Ignore:
+  - \s+
