@@ -395,7 +395,7 @@ public class AstGenerator<AstFrameKind extends Enum<?>> {
             throw new ASError.ErreurSyntaxe("Syntaxe invalide. Est-ce qu'il manque une virgule entre deux \u00E9l\u00E9ments?");
         }
 
-        return (Statement) programmesDict
+        return programmesDict
                 .get(programmeEtVariante)
                 .apply(finalLine, idxVariante);
     }

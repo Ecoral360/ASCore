@@ -154,12 +154,16 @@ public class Coordinate {
         return new Coordinate(this.coord, numLigne);
     }
 
+    public boolean isSubCoordinate(Coordinate coord) {
+        return coord.coord.endsWith(this.coord);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Coordinate that)) return false;
         return numLigne == that.numLigne &&
-                Objects.equals(coord, that.coord);
+               Objects.equals(coord, that.coord);
     }
 
     @Override

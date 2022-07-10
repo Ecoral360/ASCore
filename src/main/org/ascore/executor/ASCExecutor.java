@@ -10,6 +10,7 @@ import org.ascore.lang.ASCLexer;
 import org.ascore.lang.ASCParser;
 import org.ascore.lang.modules.core.ModuleManager;
 import org.ascore.managers.data.Data;
+import org.ascore.utils.Pair;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -531,7 +532,7 @@ public class ASCExecutor<ExecutorState extends ASCExecutorState> {
         // set la coordonne au debut du scope
         coordRunTime.setCoord(startCoord);
 
-        Object resultat = "[]";
+        Object result = "[]";
         Statement ligneParsed = null;
 
         while (executionActive && canExecute) {
@@ -544,9 +545,19 @@ public class ASCExecutor<ExecutorState extends ASCExecutorState> {
                 break;
             }
 
+            var resultPair = executeStatement(ligneParsed);
+            if (resultPair.first() == null) { // if the first element is null, it means that to return the second element as is
+                return resultPair.second();
+            } else if (resultPair.first()) { // if the first element is true, it means that to set the result as the second element and continue
+                result = resultPair.second();
+            } else {                         // if the first element is false, it means that to set the result as the second element and break
+                result = resultPair.second();
+                break;
+            }
+
 
             // s'il y a une erreur dans l'execution, on arr�te l'execution et on �crit le message d'erreur dans la console de l'app
-            try {
+            /*try {
                 // execution de la ligne et enregistrement du resultat dans la variable du meme nom
                 resultat = ligneParsed.execute();
 
@@ -594,9 +605,108 @@ public class ASCExecutor<ExecutorState extends ASCExecutorState> {
                 break;
             }
             // on passe a la coordonnee suivante
-            coordRunTime.plusUn();
+            coordRunTime.plusUn();*/
         }
-        return (ligneParsed instanceof Statement.EndOfProgramStatement || !executionActive || resultat == null) ? datas.toString() : resultat;
+        return (ligneParsed instanceof Statement.EndOfProgramStatement || !executionActive || result == null) ? datas.toString() : result;
+    }
+
+    public Object executerCodeBlock(String block, String startCoord) {
+        // set the coordinate to the start of the code block
+        if (startCoord == null) coordRunTime.nouveauBloc(block);
+        else coordRunTime.setCoord(startCoord);
+
+        var scope = coordCompileDict.get(coordRunTime.getScope());
+
+        var currentBlock = coordRunTime.copy();
+
+        Object result = "[]";
+        Statement ligneParsed = null;
+
+        while (executionActive && canExecute && currentBlock.isSubCoordinate(coordRunTime)) {
+            // System.out.println(coordRunTime);
+            // get la ligne a executer dans le dictionnaire de coordonnees
+            ligneParsed = scope.get(coordRunTime.toString());
+
+            if (ligneParsed instanceof Statement.EndOfProgramStatement) { // ne sera vrai que si cela est la derniere ligne du programme
+                coordRunTime.setCoord(null);
+                executionActive = false;
+                break;
+            }
+
+
+            // s'il y a une erreur dans l'execution, on arr�te l'execution et on �crit le message d'erreur dans la console de l'app
+            var resultPair = executeStatement(ligneParsed);
+            if (resultPair.first() == null) { // if the first element is null, it means that to return the second element as is
+                return resultPair.second();
+            } else if (resultPair.first()) { // if the first element is true, it means that to set the result as the second element and continue
+                result = resultPair.second();
+            } else {                         // if the first element is false, it means that to set the result as the second element and break
+                result = resultPair.second();
+                break;
+            }
+        }
+        return (ligneParsed instanceof Statement.EndOfProgramStatement || !executionActive || result == null) ? datas.toString() : result;
+    }
+
+
+    /**
+     * @param statement the statement to execute
+     * @return Pair&lt;Boolean, String> : <ul>
+     * <li>&lt;true, result> if the execution is not finished</li>
+     * <li>&lt;false, result> if the execution is finished</li>
+     * <li>&lt;null, result> if the execution is finished and the result should be returned as is</li>
+     * </ul>
+     */
+    public Pair<Boolean, Object> executeStatement(Statement statement) {
+        Object result = "[]";
+        try {
+            // execution de la ligne et enregistrement du resultat dans la variable du meme nom
+            result = statement.execute();
+
+            if (result instanceof Data) {
+                datas.add((Data) result);
+
+            } else if (result != null && !coordRunTime.getScope().equals("main")) {
+                // ne sera vrai que si l'on retourne d'une fonction
+                return new Pair<>(false, result);
+            }
+
+//                if (datas.size() >= MAX_DATA_BEFORE_SEND) {
+//                    synchronized (datas) {
+//                        return datas.toString();
+//                    }
+//                }
+        } catch (StopSendData e) {
+            return new Pair<>(null, e.getDataString());
+
+        } catch (StopGetInfo e) {
+            datas.add(e.getData());
+            return new Pair<>(null, datas.toString());
+
+        } catch (StopSetInfo e) {
+            datas.add(e.getData());
+
+        } catch (ErreurAliveScript e) {
+            // si l'erreur lancee est de type ASErreur.ErreurExecution (Voir ASErreur.java),
+            // on l'affiche et on arrete l'execution du programme
+            datas.add(e.getAsData(this));
+            arreterExecution();
+            e.afficher(this);
+            return new Pair<>(false, null);
+
+        } catch (RuntimeException e) {
+            // s'il y a une erreur, mais que ce n'est pas une erreur se trouvant dans ASErreur, c'est une
+            // erreur de syntaxe, comme l'autre type d'erreur, on l'affiche et on arrete l'execution du programme
+            e.printStackTrace();
+            datas.add(new ErreurSyntaxe("Une erreur interne inconnue est survenue lors de l'ex\u00E9cution de la ligne, v\u00E9rifiez que la syntaxe est valide")
+                    .getAsData(this));
+            if (debug) System.out.println(coordRunTime);
+            arreterExecution();
+            return new Pair<>(false, null);
+        }
+        // on passe a la coordonnee suivante
+        coordRunTime.plusUn();
+        return new Pair<>(true, result);
     }
 
     /**
