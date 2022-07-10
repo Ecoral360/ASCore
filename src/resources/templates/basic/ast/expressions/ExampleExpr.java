@@ -6,18 +6,14 @@ import org.ascore.lang.objects.ASCObject;
 import org.ascore.lang.objects.datatype.ASNul;
 
 /**
- * Squelette de l'impl\u00E9mentation d'une expression.<br>
- * Pour trouver un exemple d'une impl\u00E9mentation compl\u00E8te, voir {@link Var}
- *
- * @author Mathis Laroche
- * @see Var
+ * Example of the implementation of an expression.
  */
 public class ExampleExpr implements Expression<ASCObject<?>> {
 
     /**
-     * Appel\u00E9 durant le Runtime, cette m\u00E9thode retourne un objet de type ASObjet
+     * Often called at runtime, this method returns an ASCObject<?>
      *
-     * @return le r\u00E9sultat de l'expression
+     * @return the result of the expression once evaluated
      */
     @Override
     public ASCObject<?> eval() {
