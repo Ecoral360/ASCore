@@ -533,19 +533,19 @@ public class ASCExecutor<ExecutorState extends ASCExecutorState> {
         coordRunTime.setCoord(startCoord);
 
         Object result = "[]";
-        Statement ligneParsed = null;
+        Statement statement = null;
 
         while (executionActive && canExecute) {
             // System.out.println(coordRunTime);
             // get la ligne a executer dans le dictionnaire de coordonnees
-            ligneParsed = coordCompileDict.get(scope).get(coordRunTime.toString());
+            statement = coordCompileDict.get(scope).get(coordRunTime.toString());
 
-            if (ligneParsed instanceof Statement.EndOfProgramStatement) { // ne sera vrai que si cela est la derniere ligne du programme
+            if (statement instanceof Statement.EndOfProgramStatement) { // ne sera vrai que si cela est la derniere ligne du programme
                 coordRunTime.setCoord(null);
                 break;
             }
 
-            var resultPair = executeStatement(ligneParsed);
+            var resultPair = executeStatement(statement);
             if (resultPair.first() == null) { // if the first element is null, it means that to return the second element as is
                 return resultPair.second();
             } else if (resultPair.first()) { // if the first element is true, it means that to set the result as the second element and continue
@@ -607,7 +607,7 @@ public class ASCExecutor<ExecutorState extends ASCExecutorState> {
             // on passe a la coordonnee suivante
             coordRunTime.plusUn();*/
         }
-        return (ligneParsed instanceof Statement.EndOfProgramStatement || !executionActive || result == null) ? datas.toString() : result;
+        return (statement instanceof Statement.EndOfProgramStatement || !executionActive || result == null) ? datas.toString() : result;
     }
 
     public Object executerCodeBlock(String block, String startCoord) {
