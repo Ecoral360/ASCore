@@ -13,7 +13,7 @@ public class Main {
 
 
     public static void main(String[] args) {
-        var executor = new ASCExecutorBuilder()
+        var executor = new ASCExecutorBuilder<>()
                 .withLexer(new ASCLexer("/grammar_rules/Grammar.yaml"))
                 .withParser(ASCParser::new)
                 .withExecutorState(new ASCExecutorState())

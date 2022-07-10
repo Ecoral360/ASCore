@@ -12,7 +12,7 @@ public class Main {
             """;
 
     public static void main(String[] args) {
-        var executor = new ASCExecutorBuilder()
+        var executor = new ASCExecutorBuilder<>()
                 .withLexer(new MyLangLexer())
                 .withParser(MyLangParser::new)
                 .withExecutorState(new MyLangExecutorState())

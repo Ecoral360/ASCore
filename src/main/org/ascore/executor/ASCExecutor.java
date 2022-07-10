@@ -43,7 +43,7 @@ afficher "fin"
  *
  * @author Mathis Laroche
  */
-public class ASCExecutor {
+public class ASCExecutor<ExecutorState extends ASCExecutorState> {
 
     private final static int MAX_DATA_BEFORE_SEND;
     // coordonne ou commencer tous les statements
@@ -61,7 +61,7 @@ public class ASCExecutor {
     }
 
     // state
-    private final ASCExecutorState executorState;
+    private final ExecutorState executorState;
 
     // lexer et parser
     private final LexerGenerator lexer;
@@ -95,18 +95,19 @@ public class ASCExecutor {
         this(null, null, null, null, null);
     }
 
+    @SuppressWarnings("unchecked")
     public ASCExecutor(
             LexerGenerator lexer,
             AstGenerator<?> parser,
             ModuleManager moduleManager,
             ASCPrecompiler preCompiler,
-            ASCExecutorState executorState
+            ExecutorState executorState
     ) {
         this.lexer = lexer != null ? lexer : new ASCLexer();
         this.parser = parser != null ? parser : new ASCParser(this);
         this.moduleManager = moduleManager != null ? moduleManager : new ModuleManager(this);
         this.preCompiler = preCompiler != null ? preCompiler : new PreCompiler();
-        this.executorState = executorState != null ? executorState : new ASCExecutorState();
+        this.executorState = executorState != null ? executorState : (ExecutorState) new ASCExecutorState();
     }
 
     public static void main(String[] args) {
@@ -120,7 +121,7 @@ public class ASCExecutor {
         //analyste.afficherProgramme();
         //analyste.analyserLexing(Analyste.Precision.TOUT_EN_MEME_TEMPS, true);
 
-        ASCExecutor executor = new ASCExecutor();
+        ASCExecutor<?> executor = new ASCExecutor<>();
         executor.debug = true;
         Object a;
         if (!(a = executor.compiler(lines, true)).equals("[]")) System.out.println(a);
@@ -172,7 +173,7 @@ public class ASCExecutor {
         return lexer;
     }
 
-    public ASCExecutorState getExecutorState() {
+    public ExecutorState getExecutorState() {
         return executorState;
     }
 

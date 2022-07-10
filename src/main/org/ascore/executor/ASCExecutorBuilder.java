@@ -7,21 +7,21 @@ import org.ascore.lang.modules.core.ModuleManager;
 
 import java.util.function.Function;
 
-public class ASCExecutorBuilder {
+public class ASCExecutorBuilder<ExecutorState extends ASCExecutorState> {
     private ASCLexer lexer;
     private AstGenerator<?> parser;
-    private Function<ASCExecutor, ? extends AstGenerator<?>> parserGenerator;
-    private ASCExecutorState executorState;
+    private Function<ASCExecutor<ExecutorState>, ? extends AstGenerator<?>> parserGenerator;
+    private ExecutorState executorState;
     private ASCPrecompiler precompiler;
     private ModuleManager moduleManager;
 
 
-    public ASCExecutorBuilder withLexer(ASCLexer lexer) {
+    public ASCExecutorBuilder<ExecutorState> withLexer(ASCLexer lexer) {
         this.lexer = lexer;
         return this;
     }
 
-    public ASCExecutorBuilder withParser(ASCParser parser) {
+    public ASCExecutorBuilder<ExecutorState> withParser(ASCParser parser) {
         if (parserGenerator != null) {
             throw new IllegalStateException("the parser was already defined (using `withParser(Function<ASCExecutor, ASCParser> parserGenerator)` )");
         }
@@ -29,7 +29,7 @@ public class ASCExecutorBuilder {
         return this;
     }
 
-    public ASCExecutorBuilder withParser(Function<ASCExecutor, ? extends AstGenerator<?>> parserGenerator) {
+    public ASCExecutorBuilder<ExecutorState> withParser(Function<ASCExecutor<ExecutorState>, ? extends AstGenerator<?>> parserGenerator) {
         if (parser != null) {
             throw new IllegalStateException("the parser was already defined (using `withParser(ASCParser parser)` )");
         }
@@ -37,18 +37,18 @@ public class ASCExecutorBuilder {
         return this;
     }
 
-    public ASCExecutorBuilder withExecutorState(ASCExecutorState executorState) {
+    public ASCExecutorBuilder<ExecutorState> withExecutorState(ExecutorState executorState) {
         this.executorState = executorState;
         return this;
     }
 
-    public ASCExecutorBuilder withPrecompiler(ASCPrecompiler precompiler) {
+    public ASCExecutorBuilder<ExecutorState> withPrecompiler(ASCPrecompiler precompiler) {
         this.precompiler = precompiler;
         return this;
     }
 
-    public ASCExecutor build() {
-        var executor = new ASCExecutor(lexer, parser, null, precompiler, executorState);
+    public ASCExecutor<ExecutorState> build() {
+        var executor = new ASCExecutor<>(lexer, parser, null, precompiler, executorState);
         if (parser == null && parserGenerator != null) {
             executor.setParser(parserGenerator.apply(executor));
         }
