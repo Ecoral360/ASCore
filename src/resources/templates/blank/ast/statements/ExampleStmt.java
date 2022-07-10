@@ -11,8 +11,6 @@ import java.util.List;
 
 /**
  * Example of the implementation of a statement.
- *
- * @author Mathis Laroche
  */
 public class ExampleStmt extends Statement {
 

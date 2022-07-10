@@ -7,8 +7,6 @@ import org.ascore.lang.objects.datatype.ASNul;
 
 /**
  * Example of the implementation of an expression.
- *
- * @author Mathis Laroche
  */
 public class ExampleExpr implements Expression<ASCObject<?>> {
 
