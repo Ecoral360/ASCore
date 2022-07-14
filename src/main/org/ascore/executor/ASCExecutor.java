@@ -85,7 +85,7 @@ public class ASCExecutor<ExecutorState extends ASCExecutorState> {
     // ast
     private AstGenerator<?> parser;
     private JSONObject context = null;
-    private String[] anciennesLignes = null;
+    private String anciennesLignes = null;
     // failsafe
     private boolean compilationActive = false;
     private boolean executionActive = false;
@@ -113,9 +113,9 @@ public class ASCExecutor<ExecutorState extends ASCExecutorState> {
 
     public static void main(String[] args) {
 
-        String[] lines = """
+        String lines = """
                 show 3 + 99
-                """.split("\n");
+                """;
 
 
         //Analyste analyste = new Analyste(lines);
@@ -245,7 +245,7 @@ public class ASCExecutor<ExecutorState extends ASCExecutorState> {
     /**
      * @return les dernieres lignes a avoir ete compile sous la forme d'une array de String
      */
-    public String[] getLignes() {
+    public String getLignes() {
         return anciennesLignes;
     }
 
@@ -367,7 +367,7 @@ public class ASCExecutor<ExecutorState extends ASCExecutorState> {
      *                          (le code sera alors compile meme s'il est identique au code precedemment compile)
      *                          </li>
      */
-    public JSONArray compiler(String[] lignes, boolean compilationForcee) {
+    public JSONArray compiler(String lignes, boolean compilationForcee) {
         reset();
 
         /*
@@ -378,7 +378,7 @@ public class ASCExecutor<ExecutorState extends ASCExecutorState> {
          *
          * Cependant, cette condition peut etre overwrite si la compilation est forcee (compilationForce serait alors true)
          */
-        if (Arrays.equals(lignes, anciennesLignes) && !compilationForcee) {
+        if (lignes.equals(anciennesLignes) && !compilationForcee) {
             if (debug) System.out.println("No changes: compilation done");
             return new JSONArray();
         } else {
@@ -399,7 +399,7 @@ public class ASCExecutor<ExecutorState extends ASCExecutorState> {
      *               Represente les lignes de code a compiler, une ligne se finit par un <code>\n</code>
      *               </li>
      */
-    private JSONArray compiler(String[] lignes) {
+    private JSONArray compiler(String lignes) {
 
         // sert au calcul du temps qu'a pris le code pour etre compile
         LocalDateTime before = LocalDateTime.now();
@@ -421,12 +421,14 @@ public class ASCExecutor<ExecutorState extends ASCExecutorState> {
          */
         coordCompileDict.put("main", new Hashtable<>());
 
+        var codeTokenized = lexer.splitInStatements(lexer.lex(lignes));
+
         // boucle a travers toutes les lignes de l'array "lignes"
-        for (int i = 0; i < lignes.length; i++) {
-            String line = lignes[i];
+        for (int i = 0; i < codeTokenized.size(); i++) {
+            var lineToken = codeTokenized.get(i);
 
             // produit la liste de Token representant la ligne (voir lexer.lex)
-            var lineToken = lexer.lex(line.trim());
+
 
             // obtiens la coordonne ainsi que le scope ou sera enregistree la ligne compilee
             String coordActuelle = coordCompileTime.get(coordCompileTime.size() - 1).toString();
@@ -489,7 +491,7 @@ public class ASCExecutor<ExecutorState extends ASCExecutorState> {
             );
 
             // ajoute une ligne null à la fin pour signaler la fin de l'exécution
-            if (i + 1 == lignes.length) {
+            if (i + 1 == codeTokenized.size()) {
                 Statement fin = new Statement.EndOfProgramStatement();
                 fin.setNumLine(i + 1);
                 coordCompileDict.get(scopeActuel).put(coordRunTime.toString(), fin);
@@ -505,8 +507,8 @@ public class ASCExecutor<ExecutorState extends ASCExecutorState> {
         } catch (ASCErrors.ASCError err) {
             canExecute = false;
             compilationActive = false;
-            err.afficher(this, lignes.length);
-            return new JSONArray().put(err.getAsData(lignes.length));
+            err.afficher(this, codeTokenized.size());
+            return new JSONArray().put(err.getAsData(codeTokenized.size()));
 
         }
 

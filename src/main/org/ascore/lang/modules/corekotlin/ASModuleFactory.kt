@@ -7,7 +7,7 @@ import org.ascore.lang.objects.ASObjet
 import org.ascore.executor.ASCExecutor
 
 interface ASModuleFactory {
-    fun charger(executorInstance: ASCExecutor): ASModule
+    fun charger(executorInstance: ASCExecutor<*>): ASModule
 
     fun fonction(
         nom: String,

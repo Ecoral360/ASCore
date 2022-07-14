@@ -6,6 +6,8 @@
       <sourceFolder url="file://$MODULE_DIR$/src/main" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/org/uselessfun/ascore/regle_et_grammaire" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/resources" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/mylang/grammar_rules" type="java-test-resource" />
       <excludeFolder url="file://$MODULE_DIR$/src/resources/backup" />
     </content>
     <orderEntry type="inheritedJdk" />

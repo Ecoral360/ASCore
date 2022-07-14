@@ -16,7 +16,7 @@ public class MyLangPreCompiler extends ASCPrecompiler {
      * @return The precompiled source code as an array of strings. (aka the actual code that will be compiled)
      */
     @Override
-    public String[] preCompile(String[] strings) {
+    public String preCompile(String strings) {
         return strings;
     }
 

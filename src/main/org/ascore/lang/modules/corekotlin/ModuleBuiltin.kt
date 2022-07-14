@@ -9,10 +9,11 @@ import org.ascore.lang.objects.datatype.ASNul
 import org.ascore.lang.objects.datatype.ASTexte
 import org.ascore.managers.data.Data
 import org.ascore.executor.ASCExecutor
+import org.ascore.executor.ASCExecutorState
 
 object ModuleBuiltin : ASModuleFactory {
 
-    override fun charger(executorInstance: ASCExecutor): ASModule {
+    override fun charger(executorInstance: ASCExecutor<*>): ASModule {
         val fonctions = arrayOf(
             fonction(
                 "afficher", ASTypeBuiltin.nulType, arrayOf(

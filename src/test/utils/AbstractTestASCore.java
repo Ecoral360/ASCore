@@ -1,11 +1,11 @@
-package test.utils;
+package utils;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static test.utils.AliveScriptTester.isDone;
-import static test.utils.AliveScriptTester.resetExecuteur;
+import static utils.ASCoreTester.isDone;
+import static utils.ASCoreTester.resetExecuteur;
 
 public class AbstractTestASCore {
     protected final boolean DEBUG;

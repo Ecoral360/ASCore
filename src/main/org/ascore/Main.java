@@ -19,7 +19,7 @@ public class Main {
                 .withExecutorState(new ASCExecutorState())
                 .withPrecompiler(new PreCompiler())
                 .build();
-        JSONArray compilationResult = executor.compiler(CODE.split("\n"), true);
+        JSONArray compilationResult = executor.compiler(CODE, true);
         if (compilationResult.length() != 0) {
             System.out.println(compilationResult);
             return;

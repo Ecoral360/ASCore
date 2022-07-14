@@ -1,10 +1,10 @@
-package test.ascore;
+package ascore;
 
 import org.junit.jupiter.api.*;
-import test.utils.AbstractTestASCore;
+import utils.AbstractTestASCore;
 
-import static test.utils.AliveScriptTester.assertCompiles;
-import static test.utils.AliveScriptTester.assertExecution;
+import static utils.ASCoreTester.assertCompiles;
+import static utils.ASCoreTester.assertExecution;
 
 public class TestASCore extends AbstractTestASCore {
     public TestASCore() {

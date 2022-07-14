@@ -107,6 +107,20 @@ public class LexerGenerator {
         return tokenList;
     }
 
+    public List<List<Token>> splitInStatements(List<Token> tokenList) {
+        List<List<Token>> statements = new ArrayList<>();
+        List<Token> statement = new ArrayList<>();
+        for (Token token : tokenList) {
+            if (token.getName().equals("@END_STATEMENT")) {
+                statements.add(statement);
+                statement = new ArrayList<>();
+            } else {
+                statement.add(token);
+            }
+        }
+        return statements;
+    }
+
 
     /**
      * @return le prochain index valide (ignore les patterns dans ignorerRegles)

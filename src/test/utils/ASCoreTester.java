@@ -1,4 +1,4 @@
-package test.utils;
+package utils;
 
 
 import org.ascore.executor.ASCExecutor;
@@ -6,12 +6,12 @@ import org.json.JSONArray;
 
 import static org.junit.Assert.*;
 
-public class AliveScriptTester {
-    private static ASCExecutor executor = null;
+public class ASCoreTester {
+    private static ASCExecutor<?> executor = null;
     private static ASCoreExecutionTester executionTester = null;
 
     public static void resetExecuteur(boolean debug) {
-        executor = new ASCExecutor();
+        executor = new ASCExecutor<>();
         executor.debug = debug;
         executionTester = null;
     }
@@ -26,14 +26,12 @@ public class AliveScriptTester {
     }
 
     public static void assertCompiles(String code) {
-        final var lines = code.split("\n");
-        var result = executor.compiler(lines, true);
+        var result = executor.compiler(code, true);
         assertEquals("[]", result.toString());
     }
 
     public static ASCoreCompilationTester assertCompilation(String code) {
-        final var lines = code.split("\n");
-        var result = executor.compiler(lines, true);
+        var result = executor.compiler(code, true);
         if (executor.debug) System.out.println(result);
         return new ASCoreCompilationTester(result);
     }

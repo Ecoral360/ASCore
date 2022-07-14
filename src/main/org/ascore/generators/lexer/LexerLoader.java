@@ -17,7 +17,7 @@ import java.util.Objects;
  * @author Mathis Laroche
  */
 public class LexerLoader extends LexerGenerator {
-    private final Map<String, ?> dict;
+    private final Map<String, Object> dict;
 
     public LexerLoader(String fileName) {
         if (fileName == null) fileName = "ascore/grammar_rules/Grammar.yaml";
@@ -44,7 +44,7 @@ public class LexerLoader extends LexerGenerator {
         this.dict = new Yaml().load(stream);
     }
 
-    public Map<String, ?> getDict() {
+    public Map<String, Object> getDict() {
         return dict;
     }
 
@@ -67,10 +67,11 @@ public class LexerLoader extends LexerGenerator {
 
     @SuppressWarnings("unchecked")
     public void load() {
-        var regles_a_ajouter = (Map<String, ?>) dict.get("Ajouter");
+        var regles_a_ajouter = (Map<String, Object>) dict.get("Ajouter");
         if (regles_a_ajouter == null) {
-            regles_a_ajouter = (Map<String, ?>) dict.get("Add");
+            regles_a_ajouter = (Map<String, Object>) dict.get("Add");
         }
+        regles_a_ajouter.put("@END_STATEMENT", dict.get("EndStatement"));
 
         for (String toAdd : regles_a_ajouter.keySet()) {
             if (regles_a_ajouter.get(toAdd) instanceof Map<?, ?>) {

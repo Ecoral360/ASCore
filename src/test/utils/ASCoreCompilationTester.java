@@ -1,6 +1,6 @@
-package test.utils;
+package utils;
 
-import org.ascore.errors.ASError;
+import org.ascore.errors.ASCErrors;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -31,8 +31,8 @@ public class ASCoreCompilationTester {
         return compilationResult.getJSONObject(currentIdx);
     }
 
-    public ASCoreCompilationTester throwsASErreur(Class<? extends ASError.ErreurAliveScript> erreurClass) {
-        ASError.ErreurAliveScript erreur = null;
+    public ASCoreCompilationTester throwsASErreur(Class<? extends ASCErrors.ASCError> erreurClass) {
+        ASCErrors.ASCError erreur = null;
         try {
             erreur = erreurClass.getConstructor(String.class).newInstance("");
         } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException ignore) {

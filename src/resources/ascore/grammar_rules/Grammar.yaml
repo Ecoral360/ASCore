@@ -9,3 +9,5 @@ Ajouter:
 
 Ignorer:
   - '\s+' # pattern à ignorer '\+'
+
+EndStatement: \n

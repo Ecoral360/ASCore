@@ -2,6 +2,7 @@ package org.ascore.executor;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -31,19 +32,19 @@ public class PreCompiler extends ASCPrecompiler {
     );
 
 
-    public String[] preCompile(String[] lignes) {
+    public String preCompile(String lignes) {
         StringBuilder lignesFinales = new StringBuilder();
 
         boolean multiligne = false;
         boolean documentation = false;
-        lignes = Stream.of(lignes).map(
+        var lines = Stream.of(lignes.split("\n")).map(
                 ligne -> ligne.endsWith("\n") ?
                         ligne.substring(0, ligne.length() - 1).trim()
                         :
                         ligne.trim()
         ).toArray(String[]::new);
 
-        for (String s : lignes) {
+        for (String s : lines) {
             String ligne = s;
 
             if (multiligne) {
@@ -88,10 +89,8 @@ public class PreCompiler extends ASCPrecompiler {
 
         // split newlines of the final String to transform it into a String[]
         return Stream.of(lignesFinales.toString().split("\n"))
-                .map(ligne -> ligne.trim() + "\n")
-                .toArray(String[]::new);
+                .map(String::trim).collect(Collectors.joining("\n"));
     }
-
 }
 
 
