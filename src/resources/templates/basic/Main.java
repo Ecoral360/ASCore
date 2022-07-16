@@ -21,8 +21,8 @@ public class Main {
             """;
 
     public static void main(String[] args) {
-        var executor = new ASCExecutorBuilder<>() // create an executor builder
-                .withLexer(new MyLangLexer()) // add the lexer to the builder
+        var executor = new ASCExecutorBuilder<MyLangExecutorState>() // create an executor builder
+                .withLexer(new MyLangLexer("/mylang/grammar_rules/Grammar.yaml")) // add the lexer to the builder
                 .withParser(MyLangParser::new) // add the parser to the builder
                 .withExecutorState(new MyLangExecutorState()) // add the executor state to the builder
                 .withPrecompiler(new MyLangPreCompiler()) // add the precompiler to the builder
