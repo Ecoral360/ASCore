@@ -9,6 +9,8 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Classe responsable de charger les {@link TokenRule} du langage avec lesquelles seront contruits les
@@ -17,6 +19,7 @@ import java.util.Objects;
  * @author Mathis Laroche
  */
 public class LexerLoader extends LexerGenerator {
+    private final static Pattern VARIABLE_PATTERN = Pattern.compile("(?<!\\\\)\\$\\{(?<name>.*?)}");
     private final Map<String, Object> dict;
 
     public LexerLoader(String fileName) {
@@ -66,26 +69,41 @@ public class LexerLoader extends LexerGenerator {
     }
 
     @SuppressWarnings("unchecked")
+    private Map<String, String> getVariablesSimplified() {
+        var variables = (Map<String, String>) dict.get("Variables");
+        variables.replaceAll((name, pattern) -> evalVariableInPattern(pattern, variables));
+        return variables;
+    }
+
+    private String evalVariableInPattern(String pattern, Map<String, String> variables) {
+        Matcher matcher;
+        while ((matcher = VARIABLE_PATTERN.matcher(pattern)).find()) {
+            var nameToReplace = matcher.group("name");
+            pattern = pattern.replaceAll("(?<!\\\\)\\$\\{" + nameToReplace + "}", Matcher.quoteReplacement(variables.get(nameToReplace)));
+        }
+        pattern = pattern.replaceAll("(?<!\\\\) ", "");
+        return pattern;
+    }
+
+    @SuppressWarnings("unchecked")
     public void load() {
+        var variables = getVariablesSimplified();
         var regles_a_ajouter = (Map<String, Object>) dict.get("Ajouter");
         if (regles_a_ajouter == null) {
             regles_a_ajouter = (Map<String, Object>) dict.get("Add");
         }
         regles_a_ajouter.put("@END_STATEMENT", dict.get("EndStatement"));
 
-        // 1. collect all the internal variables
-        // 2. simplify the internal variables
-        // 3. collect all the patterns
-        // 4. simplify the patterns with the internal variables
-
         for (String toAdd : regles_a_ajouter.keySet()) {
             if (regles_a_ajouter.get(toAdd) instanceof Map<?, ?>) {
                 Map<String, ?> categorie = (Map<String, ?>) regles_a_ajouter.get(toAdd);
                 for (String element : categorie.keySet()) {
-                    this.ajouterRegle(element, (String) categorie.get(element), toAdd);
+                    var value = evalVariableInPattern((String) categorie.get(element), variables);
+                    this.ajouterRegle(element, value, toAdd);
                 }
             } else {
-                this.ajouterRegle(toAdd, (String) regles_a_ajouter.get(toAdd), "");
+                var value = evalVariableInPattern((String) regles_a_ajouter.get(toAdd), variables);
+                this.ajouterRegle(toAdd, value, "");
             }
         }
 
