@@ -2,7 +2,7 @@
 
 # ASCore : The core behind the AliveScript programming langugage
 
-> With ASCore, create your own programming language easly, all in Java!
+> With ASCore, create your own programming main.language easly, all in Java!
 
 ![Java Version][java-version]
 
@@ -17,7 +17,7 @@ _If someone wants to write the steps for the installation with another IDE, feel
 
 1. Install [IntelliJ IDEA™](https://www.jetbrains.com/idea/download/) (the community version is more than enough)
 2. Create a new project from version control and clone ASCore
-3. Go to src/Main.java
+3. Go to src/org.ascore.Main.java
 4. Run it
 5. If the terminal prints: `Welcome to ASCore!`, you're all set!
 
@@ -37,7 +37,7 @@ _For more examples and usage, please refer to the [Wiki][wiki]._
 
 ## Getting started
 
-To make your first programming language:
+To make your first programming main.language:
 
 _To learn more about the Aliot-cli, please refer to the [Wiki][wiki]._
 

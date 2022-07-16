@@ -1,3 +1,3 @@
 Manifest-Version: 1.0
-Main-Class: org.ascore.executor.Executor
+org.ascore.Main-Class: org.ascore.executor.ASCExecutor
 
