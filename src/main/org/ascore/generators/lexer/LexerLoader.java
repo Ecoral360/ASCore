@@ -73,6 +73,11 @@ public class LexerLoader extends LexerGenerator {
         }
         regles_a_ajouter.put("@END_STATEMENT", dict.get("EndStatement"));
 
+        // 1. collect all the internal variables
+        // 2. simplify the internal variables
+        // 3. collect all the patterns
+        // 4. simplify the patterns with the internal variables
+
         for (String toAdd : regles_a_ajouter.keySet()) {
             if (regles_a_ajouter.get(toAdd) instanceof Map<?, ?>) {
                 Map<String, ?> categorie = (Map<String, ?>) regles_a_ajouter.get(toAdd);
