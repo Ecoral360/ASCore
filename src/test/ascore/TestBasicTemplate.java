@@ -10,7 +10,7 @@ public class TestBasicTemplate {
     @Test
     public void testAfficher() {
         try {
-            ASCore.makeProject("./src/test/test-basic-template", "testLang", ASCore.Template.BASIC, true);
+            ASCore.makeProject("./src/test/test-basic-template", "testLang", ASCore.Template.BASIC, ASCore.Lang.JAVA, true);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

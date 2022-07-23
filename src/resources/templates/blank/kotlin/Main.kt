@@ -13,7 +13,7 @@ val CODE = """
 fun main() {
 
     val executor = ASCExecutorBuilder<MyLangExecutorState>() // create an executor builder
-        .withLexer(MyLangLexer("/Grammar.yaml")) // add the lexer to the builder
+        .withLexer(MyLangLexer("/mylang/grammar_rules/Grammar.yaml")) // add the lexer to the builder
         .withParser { executorInstance: ASCExecutor<MyLangExecutorState> ->
             MyLangParser(
                 executorInstance
