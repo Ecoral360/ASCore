@@ -450,18 +450,9 @@ public class ASCExecutor<ExecutorState extends ASCExecutorState> {
 
                 Statement ligneParsed;
 
-                if (lineToken.isEmpty()) {
-                    ligneParsed = new Statement() {
-                        @Override
-                        public Object execute() {
-                            return null;
-                        }
-                    };
-                } else {
-                    ligneParsed = parser.parse(lineToken);
-                }
+                ligneParsed = parser.parse(lineToken);
 
-                ligneParsed.setNumLine(i);
+                ligneParsed.setNumLine(i + 1);
 
                 // met ligneParsed dans le dictionnaire de coordonne
                 coordCompileDict.get(scopeActuel).put(coordActuelle, ligneParsed);
@@ -486,17 +477,18 @@ public class ASCExecutor<ExecutorState extends ASCExecutorState> {
             }
 
             // update la coordonnee
-            coordCompileTime.set(coordCompileTime.size() - 1,
-                    new Coordinate(coordRunTime.plusUn().toString())
+            coordRunTime.plusUn();
+            coordCompileTime.set(
+                    coordCompileTime.size() - 1,
+                    new Coordinate(coordRunTime.toString())
             );
-
-            // ajoute une ligne null à la fin pour signaler la fin de l'exécution
-            if (i + 1 == codeTokenized.size()) {
-                Statement fin = new Statement.EndOfProgramStatement();
-                fin.setNumLine(i + 1);
-                coordCompileDict.get(scopeActuel).put(coordRunTime.toString(), fin);
-            }
         }
+
+        // ajoute une ligne null à la fin pour signaler la fin de l'exécution
+        Statement fin = new Statement.EndOfProgramStatement();
+        fin.setNumLine(codeTokenized.size() + 1);
+        coordCompileDict.get("main").put(coordRunTime.toString(), fin);
+
         try {
             if (!coordRunTime.getBlocActuel().equals("main")) {
                 throw new ErreurFermeture(coordRunTime.getBlocActuel());

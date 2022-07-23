@@ -110,6 +110,11 @@ public class LexerGenerator {
     public List<List<Token>> splitInStatements(List<Token> tokenList) {
         List<List<Token>> statements = new ArrayList<>();
         List<Token> statement = new ArrayList<>();
+        if (tokenList.stream().noneMatch(token -> token.getName().equals("@END_STATEMENT"))) {
+            statement.addAll(tokenList);
+            statements.add(statement);
+            return statements;
+        }
         for (Token token : tokenList) {
             if (token.getName().equals("@END_STATEMENT")) {
                 statements.add(statement);
