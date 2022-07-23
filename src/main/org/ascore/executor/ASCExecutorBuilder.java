@@ -47,6 +47,12 @@ public class ASCExecutorBuilder<ExecutorState extends ASCExecutorState> {
         return this;
     }
 
+    public <EnumModuleManager extends Enum<EnumModuleManager>> ASCExecutorBuilder<ExecutorState>
+    withModuleManager(ModuleManager<ExecutorState, EnumModuleManager> moduleManager) {
+        this.moduleManager = moduleManager;
+        return this;
+    }
+
     public ASCExecutor<ExecutorState> build() {
         var executor = new ASCExecutor<>(lexer, parser, null, precompiler, executorState);
         if (parser == null && parserGenerator != null) {

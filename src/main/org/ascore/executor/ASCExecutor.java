@@ -106,7 +106,7 @@ public class ASCExecutor<ExecutorState extends ASCExecutorState> {
     ) {
         this.lexer = lexer != null ? lexer : new ASCLexer();
         this.parser = parser != null ? parser : new ASCParser(this);
-        this.moduleManager = moduleManager != null ? moduleManager : new ModuleManager(this);
+        this.moduleManager = moduleManager != null ? moduleManager : new ModuleManager(this, null);
         this.preCompiler = preCompiler != null ? preCompiler : new PreCompiler();
         this.executorState = executorState != null ? executorState : (ExecutorState) new ASCExecutorState();
     }

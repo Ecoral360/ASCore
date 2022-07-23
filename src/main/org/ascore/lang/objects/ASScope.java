@@ -85,7 +85,7 @@ public class ASScope {
      *
      * @param variable la variable qui est déclarée
      */
-    public void declarerVariable(ASVariable variable) {
+    public void declareVariable(ASVariable variable) {
         variablesDeclarees.push(variable);
     }
 

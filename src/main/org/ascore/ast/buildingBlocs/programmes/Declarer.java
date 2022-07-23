@@ -66,7 +66,7 @@ public class Declarer extends Statement {
                 ? new ASConstante(var.getNom(), null)
                 : new ASVariable(var.getNom(), null, type);
 
-        scopeManager.getCurrentScope().declarerVariable(varObj);
+        scopeManager.getCurrentScope().declareVariable(varObj);
 
         var.setNom(varObj.obtenirNom());
     }

@@ -12,7 +12,7 @@ import java.util.stream.Stream;
  * Classe repr\u00E9sentant un module.<br>
  * Un module est un ensemble de {@link ASFonctionModule fonctions} et de
  * {@link ASVariable variables}/{@link ASConstante constantes}
- * qui, lorsqu'{@link #utiliser(String) utiliser}, sont d\u00E9clar\u00E9es dans le scope
+ * qui, lorsqu'{@link #use(String) utiliser}, sont d\u00E9clar\u00E9es dans le scope
  * pour \u00EAtre utilis\u00E9 plus loin dans le code
  *
  * @author Mathis Laroche
@@ -28,27 +28,27 @@ public record Module(ASFonctionModule[] fonctionModules,
         this(new ASFonctionModule[]{}, variables);
     }
 
-    public void utiliser(String prefix) {
+    public void use(String prefix) {
         //ASFonctionManager.ajouterStructure(prefix);
         for (ASFonctionModule fonctionModule : fonctionModules) {
-            ASScope.getCurrentScope().declarerVariable(new ASVariable(fonctionModule.getNom(), fonctionModule, new ASType(fonctionModule.obtenirNomType())));
+            ASScope.getCurrentScope().declareVariable(new ASVariable(fonctionModule.getNom(), fonctionModule, new ASType(fonctionModule.obtenirNomType())));
         }
         for (ASVariable variable : variables) {
-            ASScope.getCurrentScope().declarerVariable(variable.clone());
+            ASScope.getCurrentScope().declareVariable(variable.clone());
         }
         //ASFonctionManager.retirerStructure();
     }
 
-    public void utiliser(List<String> nomMethodes) {
+    public void use(List<String> nomMethodes) {
         for (ASFonctionModule fonctionModule : fonctionModules) {
             if (nomMethodes.contains(fonctionModule.getNom())) {
                 // ASFonctionManager.ajouterFonction(fonctionModule);
-                ASScope.getCurrentScope().declarerVariable(new ASVariable(fonctionModule.getNom(), fonctionModule, new ASType(fonctionModule.obtenirNomType())));
+                ASScope.getCurrentScope().declareVariable(new ASVariable(fonctionModule.getNom(), fonctionModule, new ASType(fonctionModule.obtenirNomType())));
             }
         }
         for (ASVariable variable : variables) {
             if (nomMethodes.contains(variable.obtenirNom())) {
-                ASScope.getCurrentScope().declarerVariable(variable);
+                ASScope.getCurrentScope().declareVariable(variable);
             }
         }
     }

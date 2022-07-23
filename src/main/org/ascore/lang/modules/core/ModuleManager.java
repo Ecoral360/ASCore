@@ -1,111 +1,51 @@
 package org.ascore.lang.modules.core;
 
 
-import org.ascore.errors.ASCErrors;
 import org.ascore.executor.ASCExecutor;
-import org.ascore.lang.objects.ASConstante;
-import org.ascore.lang.objects.ASScope;
-import org.ascore.lang.objects.datatype.ASListe;
-import org.ascore.lang.objects.datatype.ASTexte;
-import org.ascore.lang.modules.EnumModule;
+import org.ascore.executor.ASCExecutorState;
 
-import java.util.*;
+import java.util.Hashtable;
 
 /**
  * Interface responsable de tous les modules builtins
  *
  * @author Mathis Laroche
  */
-public record ModuleManager(ASCExecutor executorInstance) {
-    private final static Hashtable<EnumModule, ModuleFactory> MODULE_FACTORY = new Hashtable<>();
-    /*
-    TABLE DES MATIERES:
-    Module:
-    -builtins
+public class ModuleManager<ExecutorState extends ASCExecutorState, EnumModule extends Enum<EnumModule>> {
+    private final Hashtable<EnumModule, ModuleFactory<ExecutorState>> MODULE_FACTORY = new Hashtable<>();
+    private final ASCExecutor<ExecutorState> executorInstance;
+    private final Class<EnumModule> enumModuleClass;
 
-    -Voiture
-    -Math
-     */
+    public ModuleManager(ASCExecutor<ExecutorState> executorInstance, Class<EnumModule> enumModuleClass) {
+        this.executorInstance = executorInstance;
+        this.enumModuleClass = enumModuleClass;
+    }
 
-    public static void enregistrerModule(EnumModule nomModule, ModuleFactory moduleFactory) {
+    public void registerModule(EnumModule nomModule, ModuleFactory<ExecutorState> moduleFactory) {
         MODULE_FACTORY.put(nomModule, moduleFactory);
     }
 
-    public Module getModuleBuiltins() {
-        return MODULE_FACTORY.get(EnumModule.builtins).load(executorInstance);
-    }
-
-    public void utiliserModuleBuitlins() {
-        var moduleBuiltins = getModuleBuiltins();
-        moduleBuiltins.utiliser((String) null);
-        ASScope.getCurrentScope().declarerVariable(new ASConstante("builtins", new ASListe(moduleBuiltins
-                .getNomsConstantesEtFonctions()
-                .stream()
-                .map(ASTexte::new)
-                .toArray(ASTexte[]::new))));
-
-    }
-
-    public void utiliserModule(String nomModule) {
-        if (nomModule.equals("builtins")) {
-            new ASCErrors.AlerteUtiliserBuiltins("Il est inutile d'utiliser builtins, puisqu'il est utilise par defaut");
-            return;
-        }
-
-        // module vide servant à charger les fonctionnalitées expérimentales
-        if (nomModule.equals("experimental")) {
-            return;
-        }
+    public void useModule(String nomModule) {
         Module module = getModule(nomModule);
-
-        module.utiliser(nomModule);
-        ASScope.getCurrentScope().declarerVariable(new ASConstante(nomModule, new ASListe(module
-                .getNomsConstantesEtFonctions()
-                .stream()
-                .map(e -> nomModule + "." + e)
-                .map(ASTexte::new)
-                .toArray(ASTexte[]::new))));
+        module.use(nomModule);
     }
-
-    /**
-     * @param nomModule <li>nom du module a utiliser</li>
-     * @param methodes  <li></li>
-     */
-    public void utiliserModule(String nomModule, String[] methodes) {
-        if (nomModule.equals("builtins")) {
-            new ASCErrors.AlerteUtiliserBuiltins("Il est inutile d'utiliser builtins, puisque le module builtins est utilise par defaut");
-            return;
-        }
-
-        Module module = getModule(nomModule);
-
-        List<String> nomsFctEtConstDemandees = Arrays.asList(methodes);
-
-        List<String> fctEtConstPasDansModule = new ArrayList<>(nomsFctEtConstDemandees);
-        fctEtConstPasDansModule.removeAll(module.getNomsConstantesEtFonctions());
-
-        if (fctEtConstPasDansModule.size() > 0)
-            throw new ASCErrors.ErreurModule("Le module '" + nomModule + "' ne contient pas les fonctions ou les constantes: "
-                                             + fctEtConstPasDansModule.toString()
-                    .replaceAll("\\[|]", ""));
-
-        module.utiliser(nomsFctEtConstDemandees);
-        ASScope.getCurrentScope().declarerVariable(new ASConstante(nomModule, new ASListe(nomsFctEtConstDemandees
-                .stream()
-                .map(ASTexte::new)
-                .toArray(ASTexte[]::new))));
-    }
-
 
     public Module getModule(String nomModule) {
-        ModuleFactory module;
-        try {
-            module = MODULE_FACTORY.get(EnumModule.valueOf(nomModule));
-        } catch (IllegalArgumentException err) {
-            throw new ASCErrors.ErreurModule("Le module '" + nomModule + "' n'existe pas");
-        }
+        ModuleFactory<ExecutorState> module;
+        module = MODULE_FACTORY.get(Enum.valueOf(enumModuleClass, nomModule));
         return module.load(executorInstance);
     }
+
+    public ASCExecutor<?> executorInstance() {
+        return executorInstance;
+    }
+
+    @Override
+    public String toString() {
+        return "ModuleManager[" +
+               "executorInstance=" + executorInstance + ']';
+    }
+
 }
 
 

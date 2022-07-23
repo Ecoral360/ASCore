@@ -24,7 +24,7 @@ class ASModule(
 
     fun utiliser(prefix: String) {
         for (fonctionModule in fonctionModules) {
-            ASScope.getCurrentScope().declarerVariable(
+            ASScope.getCurrentScope().declareVariable(
                 ASVariable(
                     fonctionModule.nom,
                     fonctionModule,
@@ -33,7 +33,7 @@ class ASModule(
             )
         }
         for (variable in variables) {
-            ASScope.getCurrentScope().declarerVariable(variable.clone())
+            ASScope.getCurrentScope().declareVariable(variable.clone())
         }
     }
 
@@ -41,7 +41,7 @@ class ASModule(
         for (fonctionModule in fonctionModules) {
             if (nomMethodes.contains(fonctionModule.nom))
             // ASFonctionManager.ajouterFonction(fonctionModule);
-                ASScope.getCurrentScope().declarerVariable(
+                ASScope.getCurrentScope().declareVariable(
                     ASVariable(
                         fonctionModule.nom,
                         fonctionModule,
@@ -51,7 +51,7 @@ class ASModule(
         }
         for (variable in variables) {
             if (nomMethodes.contains(variable.obtenirNom())) {
-                ASScope.getCurrentScope().declarerVariable(variable)
+                ASScope.getCurrentScope().declareVariable(variable)
             }
         }
     }
