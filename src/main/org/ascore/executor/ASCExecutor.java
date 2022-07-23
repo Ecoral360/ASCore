@@ -781,7 +781,7 @@ public class ASCExecutor<ExecutorState extends ASCExecutorState> {
          */
         if (coordRunTime.toString() == null || !executionActive) {
             if (debug)
-                System.out.println("templates/blank/execution " + (executionActive ? "done" : "interruped") + " in " +
+                System.out.println("templates/blank/java/execution " + (executionActive ? "done" : "interruped") + " in " +
                                    (LocalDateTime.now().toLocalTime().toNanoOfDay() - before.toLocalTime().toNanoOfDay()) / Math.pow(10, 9) + " seconds\n");
             // boolean servant a indique que l'execution est terminee
             executionActive = false;

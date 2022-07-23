@@ -12,11 +12,11 @@ import java.util.Scanner;
 
 public class ASCore {
 
-    public static void makeProject(String dest, String langName, ProjectTemplate template, boolean log) throws IOException {
+    public static void makeProject(String dest, String langName, Template template, Lang lang, boolean log) throws IOException {
         var classLangName = langName.substring(0, 1).toUpperCase() + langName.substring(1);
         var packageName = langName.toLowerCase();
 
-        var resourcePath = "/templates/" + template.name().toLowerCase();
+        var resourcePath = "/templates/" + template.name().toLowerCase() + "/" + lang.name().toLowerCase();
 
         var templateURL = ASCore.class.getResource(resourcePath);
         if (templateURL == null) {
@@ -85,8 +85,13 @@ public class ASCore {
         }
     }
 
-    public enum ProjectTemplate {
+    public enum Template {
         BLANK,
         BASIC
+    }
+
+    public enum Lang {
+        JAVA,
+        KOTLIN
     }
 }
