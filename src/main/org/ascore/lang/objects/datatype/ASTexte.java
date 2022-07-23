@@ -2,7 +2,6 @@ package org.ascore.lang.objects.datatype;
 
 import org.ascore.lang.objects.ASObjet;
 import org.ascore.tokens.Token;
-import org.ascore.lang.objects.ASTypeBuiltin;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -75,7 +74,7 @@ public class ASTexte implements ASIterable<String> {
 
     @Override
     public String obtenirNomType() {
-        return ASTypeBuiltin.texte.toString();
+        return "texte";
     }
 
     @Override

@@ -9,7 +9,7 @@ public class ASScope {
 
     // non static fields
     private ScopeInstance parent;
-    private final Stack<ASVariable> variablesDeclarees = new Stack<>();
+    private final Stack<ASCVariable> variablesDeclarees = new Stack<>();
 
     public ASScope() {
         this.parent = null;
@@ -58,13 +58,13 @@ public class ASScope {
 
     //#region --------- not static stuff ---------
 
-    private Stack<ASVariable> cloneVariablesDeclarees() {
-        Stack<ASVariable> newVariableStack = new Stack<>();
+    private Stack<ASCVariable> cloneVariablesDeclarees() {
+        Stack<ASCVariable> newVariableStack = new Stack<>();
         variablesDeclarees.forEach(var -> newVariableStack.push(var.clone()));
         return newVariableStack;
     }
 
-    public Stack<ASVariable> getVariablesDeclarees() {
+    public Stack<ASCVariable> getVariablesDeclarees() {
         return variablesDeclarees;
     }
 
@@ -85,13 +85,13 @@ public class ASScope {
      *
      * @param variable la variable qui est déclarée
      */
-    public void declareVariable(ASVariable variable) {
+    public void declareVariable(ASCVariable variable) {
         variablesDeclarees.push(variable);
     }
 
-    public ASVariable getVariable(String nom) {
+    public ASCVariable getVariable(String nom) {
         return variablesDeclarees.stream()
-                .filter(var -> var.obtenirNom().equals(nom))
+                .filter(var -> var.getValue().equals(nom))
                 .findFirst()
                 .orElse(null);
     }
@@ -110,9 +110,9 @@ public class ASScope {
 
     public static class ScopeInstance {
         private final ScopeInstance parent;
-        private final Stack<ASVariable> variableStack;
+        private final Stack<ASCVariable> variableStack;
 
-        private ScopeInstance(ScopeInstance parent, Stack<ASVariable> variableStack) {
+        private ScopeInstance(ScopeInstance parent, Stack<ASCVariable> variableStack) {
             this.parent = parent;
             this.variableStack = variableStack;
         }
@@ -121,18 +121,18 @@ public class ASScope {
             return parent;
         }
 
-        public Stack<ASVariable> getVariableStack() {
+        public Stack<ASCVariable> getVariableStack() {
             return variableStack;
         }
 
-        public ASVariable getVariable(String nom) {
+        public ASCVariable getVariable(String nom) {
             return variableStack.stream()
-                    .filter(var -> var.obtenirNom().equals(nom))
+                    .filter(var -> var.getName().equals(nom))
                     .findFirst()
                     .orElse(parent == null ? null : parent.getVariable(nom));
         }
 
-        public ASVariable getVariable(ASVariable variable) {
+        public ASCVariable getVariable(ASCVariable variable) {
             return variableStack.stream()
                     .filter(var -> var.equals(variable))
                     .findFirst()

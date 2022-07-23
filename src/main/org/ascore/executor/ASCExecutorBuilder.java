@@ -3,7 +3,6 @@ package org.ascore.executor;
 import org.ascore.generators.ast.AstGenerator;
 import org.ascore.lang.ASCLexer;
 import org.ascore.lang.ASCParser;
-import org.ascore.lang.modules.core.ModuleManager;
 
 import java.util.function.Function;
 
@@ -13,7 +12,6 @@ public class ASCExecutorBuilder<ExecutorState extends ASCExecutorState> {
     private Function<ASCExecutor<ExecutorState>, ? extends AstGenerator<?>> parserGenerator;
     private ExecutorState executorState;
     private ASCPrecompiler precompiler;
-    private ModuleManager moduleManager;
 
 
     public ASCExecutorBuilder<ExecutorState> withLexer(ASCLexer lexer) {
@@ -47,14 +45,8 @@ public class ASCExecutorBuilder<ExecutorState extends ASCExecutorState> {
         return this;
     }
 
-    public <EnumModuleManager extends Enum<EnumModuleManager>> ASCExecutorBuilder<ExecutorState>
-    withModuleManager(ModuleManager<ExecutorState, EnumModuleManager> moduleManager) {
-        this.moduleManager = moduleManager;
-        return this;
-    }
-
     public ASCExecutor<ExecutorState> build() {
-        var executor = new ASCExecutor<>(lexer, parser, null, precompiler, executorState);
+        var executor = new ASCExecutor<>(lexer, parser, precompiler, executorState);
         if (parser == null && parserGenerator != null) {
             executor.setParser(parserGenerator.apply(executor));
         }

@@ -8,7 +8,6 @@ import org.ascore.generators.ast.AstGenerator;
 import org.ascore.generators.lexer.LexerGenerator;
 import org.ascore.lang.ASCLexer;
 import org.ascore.lang.ASCParser;
-import org.ascore.lang.modules.core.ModuleManager;
 import org.ascore.managers.data.Data;
 import org.ascore.utils.Pair;
 import org.json.JSONArray;
@@ -16,7 +15,10 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Hashtable;
+import java.util.Stack;
 
 
 
@@ -73,8 +75,6 @@ public class ASCExecutor<ExecutorState extends ASCExecutorState> {
     private final ArrayList<Coordinate> coordCompileTime = new ArrayList<>();
     // Coordonnee utilisee lors de l'execution pour savoir quelle ligne executer
     private final Coordinate coordRunTime = new Coordinate(debutCoord.toString());
-    // modules
-    private final ModuleManager moduleManager;
 
     // data explaining the actions to do to the com.server
     private final ArrayList<Data> datas = new ArrayList<>();
@@ -93,20 +93,18 @@ public class ASCExecutor<ExecutorState extends ASCExecutorState> {
 
 
     public ASCExecutor() {
-        this(null, null, null, null, null);
+        this(null, null, null, null);
     }
 
     @SuppressWarnings("unchecked")
     public ASCExecutor(
             LexerGenerator lexer,
             AstGenerator<?> parser,
-            ModuleManager moduleManager,
             ASCPrecompiler preCompiler,
             ExecutorState executorState
     ) {
         this.lexer = lexer != null ? lexer : new ASCLexer();
         this.parser = parser != null ? parser : new ASCParser(this);
-        this.moduleManager = moduleManager != null ? moduleManager : new ModuleManager(this, null);
         this.preCompiler = preCompiler != null ? preCompiler : new PreCompiler();
         this.executorState = executorState != null ? executorState : (ExecutorState) new ASCExecutorState();
     }
@@ -281,10 +279,6 @@ public class ASCExecutor<ExecutorState extends ASCExecutorState> {
 
     public void setParser(AstGenerator<?> parser) {
         this.parser = parser;
-    }
-
-    public ModuleManager getAsModuleManager() {
-        return moduleManager;
     }
 
     /**
