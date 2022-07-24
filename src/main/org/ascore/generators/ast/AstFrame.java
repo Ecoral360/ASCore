@@ -14,13 +14,24 @@ import java.util.function.Function;
 
 public record AstFrame(
         Pair<Hashtable<String, AstNode<? extends Statement>>, ArrayList<String>> statements,
-        Pair<Hashtable<String, AstNode<? extends Expression<?>>>, ArrayList<String>> expressions
+        Pair<Hashtable<String, AstNode<? extends Expression<?>>>, ArrayList<String>> expressions,
+        ArrayList<Pair<String, String>> openClosePairs
 ) {
     public AstFrame() {
         this(
-                new Pair<>(new Hashtable<>(), new ArrayList<>()),  // statements
-                new Pair<>(new Hashtable<>(), new ArrayList<>())   // expressions
+                new Pair<>(new Hashtable<>(), new ArrayList<>()),   // statements
+                new Pair<>(new Hashtable<>(), new ArrayList<>()),   // expressions
+                new ArrayList<>()                                   // openClosePairs
         );
+    }
+
+    public String getClosingSymbolIfMatch(String openingSymbol) {
+        for (var pair : openClosePairs) {
+            if (pair.first().equals(openingSymbol)) {
+                return pair.second();
+            }
+        }
+        return null;
     }
 
     public Hashtable<String, AstNode<? extends Statement>> statementsDict() {
@@ -58,12 +69,19 @@ public record AstFrame(
     }
 
     public void addExpression(String pattern, AstNode<? extends Expression<?>> fonction) {
-        String nouveauPattern = LexerGenerator.remplaceCategoriesByMembers(pattern);
+        pattern = LexerGenerator.remplaceCategoriesByMembers(pattern);
+        if (pattern.contains("#expression")) {
+            var splitted = List.of(pattern.split(" "));
+            openClosePairs.add(new Pair<>(
+                    splitted.get(splitted.indexOf("#expression") - 1),
+                    splitted.get(splitted.indexOf("#expression") + 1))
+            );
+        }
         if (fonction.getImportance() == -1)
             fonction.setImportance(expressionsOrder().size());
-        var previous = expressionsDict().put(nouveauPattern, fonction);
+        var previous = expressionsDict().put(pattern, fonction);
         if (previous == null) {
-            expressionsOrder().add(fonction.getImportance(), nouveauPattern);
+            expressionsOrder().add(fonction.getImportance(), pattern);
         }
     }
 

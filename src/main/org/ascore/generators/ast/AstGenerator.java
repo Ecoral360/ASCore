@@ -85,9 +85,38 @@ public class AstGenerator<AstFrameKind extends Enum<?>> {
         return structurePattern.matcher(line);
     }
 
-    private int endOfHashExpression(ArrayList<String> expressionNom, ArrayList<Object> expressionArray, String regleSyntaxe) {
-        int debut = 0;
-        return 0;
+    private int endOfHashExpression(ArrayList<String> expressionNom, String syntaxRule) {
+        /*
+         * Actions:
+         *  0. Create a stack to store the expression that need closing with the current closing TOKEN as the first element
+         *  1. For each TOKEN in expressionNom, check if the TOKEN is in the list of opening TOKEN
+         *      2. If yes, add the closing TOKEN to the stack
+         *      3. If no, check if the TOKEN is on top of the closing symbol stack
+         *          4. If yes, pop the closing symbol stack
+         *          5. If no, continue
+         *  6. If the closing symbol stack is not empty, return the index of the last TOKEN in the expressionNom
+         */
+        Stack<String> closingSymbolStack = new Stack<>();
+        var splitted = new ArrayList<>(List.of(syntaxRule.split(" ")));
+        int start = splitted.indexOf("#expression") - 1;
+        closingSymbolStack.push(currentAstFrame.getClosingSymbolIfMatch(expressionNom.get(start)));
+        int idx = start + 1;
+        for (; idx < expressionNom.size(); idx++) {
+            String tokenName = expressionNom.get(idx);
+            if (tokenName.equals("expression")) continue;
+            String closingToken;
+            if ((closingToken = currentAstFrame.getClosingSymbolIfMatch(tokenName)) != null) {
+                closingSymbolStack.push(closingToken);
+            } else {
+                if (closingSymbolStack.isEmpty()) {
+                    break;
+                }
+                if (closingSymbolStack.peek().equals(tokenName)) {
+                    closingSymbolStack.pop();
+                }
+            }
+        }
+        return idx;
     }
 
     protected AstFrame currentAstFrame() {
@@ -222,7 +251,7 @@ public class AstGenerator<AstFrameKind extends Enum<?>> {
                         }
                         debut = i;
                         expressionNom = expressionNom.subList(debut, expressionNom.size());
-                        int fin = debut + expressionNom.size();
+                        int fin = debut + endOfHashExpression(new ArrayList<>(expressionNom), regleSyntaxe);
 
                         List<Object> expr = expressionArray.subList(debut, fin);
 
