@@ -5,6 +5,7 @@ import org.ascore.tokens.Token;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 /**
@@ -51,6 +52,10 @@ public class TokenRule {
 
     public String getPattern() {
         return this.pattern;
+    }
+
+    public Pattern compileToPattern() {
+        return Pattern.compile(this.pattern);
     }
 
     public String getCategory() {

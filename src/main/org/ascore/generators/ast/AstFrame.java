@@ -70,12 +70,14 @@ public record AstFrame(
 
     public void addExpression(String pattern, AstNode<? extends Expression<?>> fonction) {
         pattern = LexerGenerator.remplaceCategoriesByMembers(pattern);
-        if (pattern.contains("#expression")) {
-            var splitted = List.of(pattern.split(" "));
-            openClosePairs.add(new Pair<>(
-                    splitted.get(splitted.indexOf("#expression") - 1),
-                    splitted.get(splitted.indexOf("#expression") + 1))
-            );
+        for (var variant : pattern.split("~")) {
+            if (variant.contains("#expression")) {
+                var splitted = List.of(variant.split(" "));
+                openClosePairs.add(new Pair<>(
+                        splitted.get(splitted.indexOf("#expression") - 1),
+                        splitted.get(splitted.indexOf("#expression") + 1))
+                );
+            }
         }
         if (fonction.getImportance() == -1)
             fonction.setImportance(expressionsOrder().size());

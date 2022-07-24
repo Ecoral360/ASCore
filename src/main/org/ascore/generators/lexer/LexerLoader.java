@@ -6,6 +6,7 @@ import org.yaml.snakeyaml.error.YAMLException;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -20,6 +21,7 @@ import java.util.regex.Pattern;
  */
 public class LexerLoader extends LexerGenerator {
     private final static Pattern VARIABLE_PATTERN = Pattern.compile("(?<!\\\\)\\$\\{(?<name>.*?)}");
+    private final static Pattern FLAG_PATTERN = Pattern.compile("\\{FLAGS *: *(?<flags>[imsxu]*) *}$");
     private final Map<String, Object> dict;
 
     public LexerLoader(String fileName) {
@@ -83,6 +85,21 @@ public class LexerLoader extends LexerGenerator {
         }
         pattern = pattern.replaceAll("(?<!\\\\) ", "");
         return pattern;
+    }
+
+    private Integer[] extractFlags(String pattern) {
+        var flagList = new ArrayList<Integer>();
+        var matcher = FLAG_PATTERN.matcher(pattern);
+        if (!matcher.find()) {
+            return flagList.toArray(Integer[]::new);
+        }
+        var flags = matcher.group("flags");
+        if (pattern.contains("i")) flagList.add(Pattern.CASE_INSENSITIVE);
+        if (pattern.contains("m")) flagList.add(Pattern.MULTILINE);
+        if (pattern.contains("s")) flagList.add(Pattern.DOTALL);
+        if (pattern.contains("x")) flagList.add(Pattern.COMMENTS);
+        if (pattern.contains("u")) flagList.add(Pattern.UNICODE_CASE);
+        return flagList.toArray(Integer[]::new);
     }
 
     @SuppressWarnings("unchecked")

@@ -91,7 +91,7 @@ public class LexerGenerator {
 
             boolean trouve = false;
             for (TokenRule tokenRule : this.getReglesAjoutees()) {
-                Matcher match = Pattern.compile(tokenRule.getPattern()).matcher(s);
+                Matcher match = tokenRule.compileToPattern().matcher(s);
                 if (match.find(idx) && match.start() == idx) {
                     debut = match.start();
                     idx = match.end();
