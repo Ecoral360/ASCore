@@ -4,6 +4,7 @@ package org.ascore.tokens;
 import org.ascore.generators.lexer.TokenRule;
 
 import java.util.Objects;
+import java.util.regex.Matcher;
 
 /**
  * Les explications vont être rajouté quand j'aurai la motivation de les écrire XD
@@ -17,28 +18,27 @@ public class Token {
     private final int start;
     private final TokenRule tokenRuleParent;
 
-    public Token(String name, String value, String category, int start, TokenRule tokenRuleParent) {
+    private final Matcher match;
+
+    public Token(String name, String value, String category, int start, TokenRule tokenRuleParent, Matcher match) {
         this.name = name;
         this.value = value;
         this.category = category;
         this.start = start;
         this.tokenRuleParent = tokenRuleParent;
-    }
-
-    public Token(String name, String value, String category, int start) {
-        this(name, value, category, start, null);
+        this.match = match;
     }
 
     public static Token withName(String name) {
-        return new Token(name, null, null, -1);
+        return new Token(name, null, null, -1, null, null);
     }
 
     public static Token withCategory(String category) {
-        return new Token(null, null, category, -1);
+        return new Token(null, null, category, -1, null, null);
     }
 
     public static Token withValue(String value) {
-        return new Token(null, value, null, -1);
+        return new Token(null, value, null, -1, null, null);
     }
 
     public String getCategory() {
@@ -55,6 +55,10 @@ public class Token {
 
     public int getStart() {
         return this.start;
+    }
+
+    public Matcher getMatch() {
+        return match;
     }
 
     public TokenRule getTokenRuleParent() {

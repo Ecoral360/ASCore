@@ -4,6 +4,7 @@ import org.ascore.tokens.Token;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.regex.Matcher;
 
 
 /**
@@ -15,21 +16,21 @@ public class TokenRule {
 
     static private final Hashtable<String, ArrayList<String>> categories = new Hashtable<>();
 
-    private final String nom, pattern, categorie;
+    private final String name, pattern, category;
 
-    public TokenRule(String nom, String pattern, String categorie) {
-        this.nom = nom;
+    public TokenRule(String name, String pattern, String category) {
+        this.name = name;
         this.pattern = pattern;
-        this.categorie = categorie;
+        this.category = category;
 
-        categories.putIfAbsent(categorie, new ArrayList<>());
-        categories.get(categorie).add(nom);
+        categories.putIfAbsent(category, new ArrayList<>());
+        categories.get(category).add(name);
     }
 
     public TokenRule(String pattern) {
-        this.categorie = null;
+        this.category = null;
         this.pattern = pattern;
-        this.nom = null;
+        this.name = null;
     }
 
     public static void reset() {
@@ -44,28 +45,28 @@ public class TokenRule {
         return categories.get(nomCategorie);
     }
 
-    public String getNom() {
-        return this.nom;
+    public String getName() {
+        return this.name;
     }
 
     public String getPattern() {
         return this.pattern;
     }
 
-    public String getCategorie() {
-        return this.categorie;
+    public String getCategory() {
+        return this.category;
     }
 
-    public Token makeToken(String valeur, int debut) {
-        return new Token(this.nom, valeur, this.categorie, debut, this);
+    public Token makeToken(String valeur, int debut, Matcher match) {
+        return new Token(this.name, valeur, this.category, debut, this, match);
     }
 
     @Override
     public String toString() {
         return "Regle{" +
-                "nom='" + nom + '\'' +
-                ", pattern='" + pattern + '\'' +
-                ", categorie='" + categorie + '\'' +
-                '}';
+               "nom='" + name + '\'' +
+               ", pattern='" + pattern + '\'' +
+               ", categorie='" + category + '\'' +
+               '}';
     }
 }

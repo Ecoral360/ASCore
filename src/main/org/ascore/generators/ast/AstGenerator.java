@@ -42,20 +42,26 @@ public class AstGenerator<AstFrameKind extends Enum<?>> {
         //System.out.println(Arrays.toString(expressionArray));
 
         switch (Integer.compare(parentheses, 0)) {
-            case -1 -> throw new ASCErrors.ErreurSyntaxe(-parentheses + " parenth\u00E8se" + pluriel + " ouvrante" + pluriel + " '(' manquante" + pluriel);
-            case 1 -> throw new ASCErrors.ErreurSyntaxe(parentheses + " parenth\u00E8se" + pluriel + " fermante" + pluriel + " ')' manquante" + pluriel);
+            case -1 ->
+                    throw new ASCErrors.ErreurSyntaxe(-parentheses + " parenth\u00E8se" + pluriel + " ouvrante" + pluriel + " '(' manquante" + pluriel);
+            case 1 ->
+                    throw new ASCErrors.ErreurSyntaxe(parentheses + " parenth\u00E8se" + pluriel + " fermante" + pluriel + " ')' manquante" + pluriel);
         }
 
         pluriel = Math.abs(braces) > 1 ? "s" : "";
         switch (Integer.compare(braces, 0)) {
-            case -1 -> throw new ASCErrors.ErreurSyntaxe(-braces + " accolade" + pluriel + " ouvrante" + pluriel + " '{' manquante" + pluriel);
-            case 1 -> throw new ASCErrors.ErreurSyntaxe(braces + " accolade" + pluriel + " fermante" + pluriel + " '}' manquante" + pluriel);
+            case -1 ->
+                    throw new ASCErrors.ErreurSyntaxe(-braces + " accolade" + pluriel + " ouvrante" + pluriel + " '{' manquante" + pluriel);
+            case 1 ->
+                    throw new ASCErrors.ErreurSyntaxe(braces + " accolade" + pluriel + " fermante" + pluriel + " '}' manquante" + pluriel);
         }
 
         pluriel = Math.abs(crochets) > 1 ? "s" : "";
         switch (Integer.compare(crochets, 0)) {
-            case -1 -> throw new ASCErrors.ErreurSyntaxe(-crochets + " crochet" + pluriel + " ouvrant" + pluriel + " '[' manquant" + pluriel);
-            case 1 -> throw new ASCErrors.ErreurSyntaxe(crochets + " crochet" + pluriel + " fermant" + pluriel + " ']' manquant" + pluriel);
+            case -1 ->
+                    throw new ASCErrors.ErreurSyntaxe(-crochets + " crochet" + pluriel + " ouvrant" + pluriel + " '[' manquant" + pluriel);
+            case 1 ->
+                    throw new ASCErrors.ErreurSyntaxe(crochets + " crochet" + pluriel + " fermant" + pluriel + " ']' manquant" + pluriel);
         }
 
     }
@@ -77,6 +83,11 @@ public class AstGenerator<AstFrameKind extends Enum<?>> {
         );
         //System.out.println(line + " matcher:" + structurePattern.matcher(line));
         return structurePattern.matcher(line);
+    }
+
+    private int endOfHashExpression(ArrayList<String> expressionNom, ArrayList<Object> expressionArray, String regleSyntaxe) {
+        int debut = 0;
+        return 0;
     }
 
     protected AstFrame currentAstFrame() {

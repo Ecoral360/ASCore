@@ -53,8 +53,8 @@ public class LexerGenerator {
     }
 
     protected void sortTokenRules() {
-        ArrayList<TokenRule> nomVars = reglesAjoutees.stream().filter(r -> r.getNom().equals("NOM_VARIABLE")).collect(Collectors.toCollection(ArrayList::new));
-        reglesAjoutees = reglesAjoutees.stream().filter(r -> !r.getNom().equals("NOM_VARIABLE")).collect(Collectors.toCollection(ArrayList::new));
+        ArrayList<TokenRule> nomVars = reglesAjoutees.stream().filter(r -> r.getName().equals("NOM_VARIABLE")).collect(Collectors.toCollection(ArrayList::new));
+        reglesAjoutees = reglesAjoutees.stream().filter(r -> !r.getName().equals("NOM_VARIABLE")).collect(Collectors.toCollection(ArrayList::new));
 
         Comparator<TokenRule> longueurRegle = (o1, o2) -> o2.getPattern().length() - o1.getPattern().length();
 
@@ -95,7 +95,7 @@ public class LexerGenerator {
                 if (match.find(idx) && match.start() == idx) {
                     debut = match.start();
                     idx = match.end();
-                    tokenList.add(tokenRule.makeToken(s.substring(match.start(), match.end()), debut));
+                    tokenList.add(tokenRule.makeToken(s.substring(match.start(), match.end()), debut, match));
                     trouve = true;
                     break;
                 }
@@ -147,22 +147,26 @@ public class LexerGenerator {
         return idx;
     }
 
-
+    /**
+     * @return the next valid index
+     * @Adds an error token to the tokenList
+     */
     private int ajouterErreur(int idx, String s, List<Token> tokenList) {
-        /**
-         * @add le token ERREUR � la liste de token
-         * @return le prochain index valide
-         */
+
         idx = this.prochainIndexValide(idx, s);
         Matcher match = Pattern.compile("\\S+").matcher(s);
         //System.out.println("idxOrKey : " + idxOrKey);
 
         if (idx < s.length()) {
             match.find(idx);
-            tokenList.add(new Token("(ERREUR)",
+            tokenList.add(new Token(
+                    "(ERREUR)",
                     s.substring(match.start(), match.end()),
                     "",
-                    match.start()));
+                    match.start(),
+                    null,
+                    match
+            ));
             idx = match.end();
         }
 
